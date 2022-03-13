@@ -222,7 +222,7 @@ function about(){
             </div>
 
             <!--About me: using GRID & FLEX-->
-            <div class="container-fluid shadow-lg text-light row" style="font-size: 2vmin;">
+            <div class="container-fluid shadow-lg text-light row">
 
                 <!--Column 1:-->
                 <div class="text-center col-md-2">
@@ -262,7 +262,7 @@ function about(){
                     <!--Row 2 skills-->
                     <hr>
                     <h4 class="display-4">Skills:</h4>
-                    <div class="row row-col-2 d-flex">
+                    <div class="row row-col-2 d-flex" style="font-size: 2vmin;">
                         <img class="col-2 img" src='./assets/icon-java.png'>
                         <img class="col-2 img" src='./assets/c-language.png'>
                         <img class="col-2 img" src='./assets/C-Sharp.png'>
