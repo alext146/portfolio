@@ -247,14 +247,14 @@ function about(){
                 
                     <!--Row 1 name n image-->
                     <div class="row">
-                        <div class="col-md-6 col-12">
+                        <div class="col-md-8 col-12">
                             <h1>Alex Trahan</h1>
                             <p class="indent"> Hello, my name's Alex.  I'm currently a junior studying Computer Science
                             at the University of New Orleans.  <strike>I've also taken multiple liberal arts courses relating to Political Science.</strike>
                             I'm most recently working in sales, but aspiring for a software development job.
                             I'm also a human, so feel free to contact! </p>
                         </div>
-                        <div class="col-md-4 d-md-block d-none">
+                        <div class="col-md-2 d-md-block d-none">
                             <img class="img-fluid alex" src="./assets/profile-image.png">
                         </div>
                     </div>
