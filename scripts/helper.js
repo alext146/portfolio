@@ -229,9 +229,8 @@ function about(){
                     <h4 class="lead"> Alex Trahan </h4>
                     <img id="myThumb" class="img-thumbnail w-50" src="./assets/100_0541.JPG">
                     <div class="d-flex justify-content-center gap-4 m-4">
-                        <a href="#" class="text-white"> <i class="bi bi-twitter"></i> </a>
-                        <a href="#" class="text-white"> <i class="bi bi-linkedin"></i> </a>
-                        <a href="#" class="text-white"> <i class="bi bi-github"></i> </a>
+                        <a href="https://www.linkedin.com/in/alext146/" class="text-white"> <i class="bi bi-linkedin"></i> </a>
+                        <a href="https://github.com/adtrahan146" class="text-white"> <i class="bi bi-github"></i> </a>
                     </div>
                     
                     <div class="d-flex row row-cols-1 d-md-block d-none">
