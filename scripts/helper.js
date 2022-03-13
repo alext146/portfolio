@@ -135,7 +135,9 @@ function blog(){
                         <p>
                             <small> Cataloguing my experience in development of my portfolio page! </small>
                         </p>
-                        <button class="btn btn-secondary"> Read More </button>
+                        <a href="https://docs.google.com/document/d/1OxFO_R4YZP1QzMNrB0sCyI87syE3TAy_kpWyo8SOU0k/edit?usp=sharing"
+                            <button class="btn btn-secondary" href="#"> Read More </button>
+                        </a>
                     </div>
                 </div>
                 
