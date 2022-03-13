@@ -3,6 +3,9 @@ My portflio utilizing Bootstrap &amp; Three.js: a javascript library for creatin
 
 
 # Release: 
-    0.5a
-    -initial release
-    -need to refactor bootstrap layouts to overlay properly with Three's canvas element
+   0.5.1a
+   -added link for blog
+.
+   0.5a
+   -initial release
+   -need to refactor bootstrap layouts to overlay properly with Three's canvas element
