@@ -44,29 +44,28 @@ function contact(){
             <hr>
         </div>
         
-        <div class="container-fluid mt-4 text-white justify-content-center w-75"> 
-            <form class="">
-                <div class="form-group mb-3">
-                    <label>Name:</label>
-                    <input class="form-control" type="text" id="name" placeholder="Name">
-                </div>
-                <div class="form-group mb-3">
-                    <label>Email:</label>
-                    <input class="form-control" type="email" id="email" placeholder="Email">
-                </div>
-                <div class="form-group mb-3">
-                    <label>Subject:</label>
-                    <input class="form-control" type="subject" id="subject" placeholder="Subject">
-                </div>
-                <div class="form-group mb-3">
-                    <label>Message:</label>
-                    <textarea class="form-control" rows="4" id="message" placeholder="Message">  </textarea>
-                </div>
-                <button class="btn btn-secondary float-end" type="submit"> Submit </button>
-            </form>
+        <div class="container-fluid mt-4 text-white justify-content-center w-75" id="contact-form"> 
+            <div class="mb-3">
+                <label>Name:</label>
+                <input class="form-control" type="text" id="name" placeholder="Name">
+            </div>
+            <div class="mb-3">
+                <label>Email:</label>
+                <input class="form-control" type="email" id="email" placeholder="Email">
+            </div>
+            <div class="mb-3">
+                <label>Subject:</label>
+                <input class="form-control" type="subject" id="subject" placeholder="Subject">
+            </div>
+            <div class="mb-3">
+                <label>Message:</label>
+                <textarea class="form-control" rows="4" id="message" placeholder="Message"></textarea>
+            </div>
+            <button class="btn btn-secondary float-end" id="message-submit"> Submit </button>
         </div>
         `
     );
+    initControllers();
 }
 
 function blog(){

@@ -7,6 +7,8 @@ const sceneManager = new SceneManager();
 bindEventListeners();
 render();
 
+//TO alex: Maybe do a threejs tower defense
+
 const controls = new OrbitControls(sceneManager.getCamera(), sceneManager.getRenderer().domElement);
 controls.enableDampening = true;
 controls.dampingFactor = 0.2;
