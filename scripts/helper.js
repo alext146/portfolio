@@ -121,9 +121,12 @@ function blog(){
             <ol class="carousel-indicators">
                 <li data-bs-target="#blog-carousel" data-bs-slide-to="0" class="active"></li>
                 <li data-bs-target="#blog-carousel" data-bs-slide-to="1"></li>
+                <li data-bs-target="#blog-carousel" data-bs-slide-to="2"></li>
             </ol>
+
             <!--Carousel body-->
             <div class="carousel-inner text-center">
+
                 <!--Slide 1:-->
                 <div id="slide-1" class="carousel-item active">
                     <div class="blog-gradient">
@@ -151,6 +154,22 @@ function blog(){
                             <small> A research paper I wrote during my time as a Political Science student regarding the Russian Revolution. </small>
                         </p>
                         <a href="https://docs.google.com/document/d/1qPNUk5y2OdoBan4WULltoVwxgttHU7Nrv7F1-n-MaBc/edit?usp=sharing"
+                            <button class="btn btn-secondary" href="#"> Read More </button>
+                        </a>
+                    </div>
+                </div>
+
+                <!--Slide 3:-->
+                <div id="slide-3" class="carousel-item">
+                    <div class="blog-gradient justify-content-center">
+                        <img class="blog-img" src="./assets/7115707.jpg">
+                    </div>
+                    <div class="carousel-caption">
+                        <h5> EndGameMaps Announcement! </h5>
+                        <p>
+                            <small> Full stack map application </small>
+                        </p>
+                        <a href="https://docs.google.com/document/d/1oj_e-kd38ggQmj2Wall5zBMYDalq_x8YiLDmpq7b-tE/edit?usp=sharing"
                             <button class="btn btn-secondary" href="#"> Read More </button>
                         </a>
                     </div>
