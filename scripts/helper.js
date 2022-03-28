@@ -165,7 +165,7 @@ function blog(){
                         <img class="blog-img" src="./assets/7115707.jpg">
                     </div>
                     <div class="carousel-caption">
-                        <h5> EndGameMaps Announcement! </h5>
+                        <h5> EndGameMaps Announcement </h5>
                         <p>
                             <small> Full stack map application </small>
                         </p>
