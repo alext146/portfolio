@@ -187,8 +187,8 @@ function blog(){
         <a class="my-carousel-control-next" href="#blog-carousel" role="button" data-bs-slide="next">
             <i class="carousel-control-next-icon"></i>
         </a>
-        `
-        );
+    `
+    );
 }
 
 function about(){
