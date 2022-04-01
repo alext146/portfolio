@@ -122,6 +122,7 @@ function blog(){
                 <li data-bs-target="#blog-carousel" data-bs-slide-to="0" class="active"></li>
                 <li data-bs-target="#blog-carousel" data-bs-slide-to="1"></li>
                 <li data-bs-target="#blog-carousel" data-bs-slide-to="2"></li>
+                <li data-bs-target="#blog-carousel" data-bs-slide-to="3"></li>
             </ol>
 
             <!--Carousel body-->
@@ -142,25 +143,9 @@ function blog(){
                         </a>
                     </div>
                 </div>
-                
+
                 <!--Slide 2:-->
                 <div id="slide-2" class="carousel-item">
-                    <div class="blog-gradient justify-content-center">
-                        <img class="blog-img" src="./assets/imperial-flag.jpg">
-                    </div>
-                    <div class="carousel-caption">
-                        <h5> Events and Impacts of the Russian Revolution </h5>
-                        <p>
-                            <small> A research paper I wrote during my time as a Political Science student regarding the Russian Revolution. </small>
-                        </p>
-                        <a href="https://docs.google.com/document/d/1qPNUk5y2OdoBan4WULltoVwxgttHU7Nrv7F1-n-MaBc/edit?usp=sharing"
-                            <button class="btn btn-secondary" href="#"> Read More </button>
-                        </a>
-                    </div>
-                </div>
-
-                <!--Slide 3:-->
-                <div id="slide-3" class="carousel-item">
                     <div class="blog-gradient justify-content-center">
                         <img class="blog-img" src="./assets/7115707.jpg">
                     </div>
@@ -170,6 +155,38 @@ function blog(){
                             <small> Full stack map application </small>
                         </p>
                         <a href="https://docs.google.com/document/d/1oj_e-kd38ggQmj2Wall5zBMYDalq_x8YiLDmpq7b-tE/edit?usp=sharing"
+                            <button class="btn btn-secondary" href="#"> Read More </button>
+                        </a>
+                    </div>
+                </div>
+
+                <!--Slide 3:-->
+                <div id="slide-3" class="carousel-item">
+                    <div class="blog-gradient justify-content-center">
+                        <img class="blog-img" src="./assets/rock-paper-scissors.png">
+                    </div>
+                    <div class="carousel-caption">
+                        <h5> RockPaperScissors Devlog </h5>
+                        <p>
+                            <small> Cataloging my small rock, paper, scissors game! </small>
+                        </p>
+                        <a href="https://docs.google.com/document/d/19n0ggmBQJdqIEKKHmK_aFBFLt4RfmzJUzTo4D_qUBKo/edit?usp=sharing"
+                            <button class="btn btn-secondary" href="#"> Read More </button>
+                        </a>
+                    </div>
+                </div>
+
+                <!--Slide 4:-->
+                <div id="slide-4" class="carousel-item">
+                    <div class="blog-gradient justify-content-center">
+                        <img class="blog-img" src="./assets/imperial-flag.jpg">
+                    </div>
+                    <div class="carousel-caption">
+                        <h5> Events and Impacts of the Russian Revolution </h5>
+                        <p>
+                            <small> A research paper I wrote during my time as a Political Science student regarding the Russian Revolution. </small>
+                        </p>
+                        <a href="https://docs.google.com/document/d/1qPNUk5y2OdoBan4WULltoVwxgttHU7Nrv7F1-n-MaBc/edit?usp=sharing"
                             <button class="btn btn-secondary" href="#"> Read More </button>
                         </a>
                     </div>
@@ -187,8 +204,8 @@ function blog(){
         <a class="my-carousel-control-next" href="#blog-carousel" role="button" data-bs-slide="next">
             <i class="carousel-control-next-icon"></i>
         </a>
-        `
-        );
+    `
+    );
 }
 
 function about(){
@@ -354,7 +371,7 @@ function code(){
                 <div class="row mx-auto">
 
                     <!--Card 1-->
-                    <div class="col-6 my-5 d-flex">
+                    <div class="col-4 my-5 d-flex">
                         <div class="card bg-dark text-center" style="width: 18rem;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
@@ -370,7 +387,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer opaque-regular">
                                 <small class="text-muted"> HTML, CSS </small>
-                                <a href="https://github.com/adtrahan146/war-emp/tree/master">
+                                <a href="https://github.com/adtrahan146/war-emp">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
@@ -378,7 +395,7 @@ function code(){
                     </div>
 
                     <!--Card 2-->
-                    <div class="col-6 my-5 d-flex">
+                    <div class="col-4 my-5 d-flex">
                         <div class="card bg-dark text-center" style="width: 18rem;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
@@ -398,8 +415,30 @@ function code(){
                             </div>
                         </div>
                     </div>
+
                     <!--Card 3:-->
-                    
+                    <div class="col-4 my-5 d-flex">
+                        <div class="card bg-dark text-center" style="width: 18rem;">
+                            <!--Card header-->
+                            <div class="card-header bg-transparent">
+                                <img class="img-thumbnail" src="./assets/rockpaperscissorsicon.png">
+                            </div>
+                            <!--Card body-->
+                            <div class="card-body opaque-regular">
+                                <h3 class="card-title"> Rock, Paper, Scissors </h3>
+                                <p class="card-text text-small">
+                                    A small rock/paper/scissors single page app using JS and DOM Events.
+                                </p>
+                            </div>
+                            <!--Card footer-->
+                            <div class="card-footer opaque-regular">
+                                <small class="text-muted"> JavaScript, HTML, CSS </small>
+                                <a href="https://github.com/adtrahan146/RockPaperScissors">
+                                    <button class="btn btn-secondary float-end"> See More </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <!--End card group-->
         </div>
