@@ -2,7 +2,7 @@
 My portflio utilizing Bootstrap &amp; Three.js: a javascript library for creating 3d environments in browser.
 
 ## Releases: 
-### 0.6.2 (03/28/22):
+### 0.6.2 (04/01/22):
 	- Added upload for RockPaperScissors and blog post associated with it.
 	
 ### 0.6.1 (03/28/22):
