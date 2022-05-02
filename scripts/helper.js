@@ -371,7 +371,7 @@ function code(){
                 <div class="row mx-auto">
 
                     <!--Card 1-->
-                    <div class="col-4 my-5 d-flex">
+                    <div class="col-3 my-5 d-flex">
                         <div class="card bg-dark text-center" style="width: 18rem;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
@@ -394,30 +394,32 @@ function code(){
                         </div>
                     </div>
 
-                    <!--Card 2-->
-                    <div class="col-4 my-5 d-flex">
+                    <!--Card 2:-->
+                    <div class="col-3 my-5 d-flex">
                         <div class="card bg-dark text-center" style="width: 18rem;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
-                                <img class="img-thumbnail" src="./assets/icon-java.png">
+                                <img class="img-thumbnail" src="./assets/7115707.jpg">
                             </div>
                             <!--Card body-->
                             <div class="card-body opaque-regular">
-                                <h3 class="card-title"> GroupChat </h3>
+                                <h3 class="card-title"> End Game Maps </h3>
                                 <p class="card-text text-small">
-                                    Second project upload is coming soon!
+                                    First Full Stack Project! Utilizes various JS libraries & frameworks, read about it on the Blog page!
                                 </p>
                             </div>
                             <!--Card footer-->
-                            <div class="card-footer opaque-regular">
-                                <small class="text-muted"> Java </small>
-                                <button class="btn btn-secondary float-end"> See More </button>
+                            <div class="card-footer">
+                                <small class="text-muted"> JavaScript </small>
+                                <a href="https://github.com/adtrahan146/EndGameMaps">
+                                    <button class="btn btn-secondary float-end"> See More </button>
+                                </a>
                             </div>
                         </div>
                     </div>
 
                     <!--Card 3:-->
-                    <div class="col-4 my-5 d-flex">
+                    <div class="col-3 my-5 d-flex">
                         <div class="card bg-dark text-center" style="width: 18rem;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
@@ -432,14 +434,39 @@ function code(){
                             </div>
                             <!--Card footer-->
                             <div class="card-footer opaque-regular">
-                                <small class="text-muted"> JavaScript, HTML, CSS </small>
+                                <small class="text-muted"> JavaScript </small>
                                 <a href="https://github.com/adtrahan146/RockPaperScissors">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
                         </div>
                     </div>
+
+                    <!--Card 4:-->
+                    <div class="col-3 my-5 d-flex">
+                        <div class="card bg-dark text-center" style="width: 18rem;">
+                            <!--Card header-->
+                            <div class="card-header bg-transparent">
+                                <img class="img-thumbnail" src="./assets/peoples.png">
+                            </div>
+                            <!--Card body-->
+                            <div class="card-body opaque-regular">
+                                <h3 class="card-title"> The People's Insight </h3>
+                                <p class="card-text text-small">
+                                    News app which retrieves the day's top posts from various news related subreddits!
+                                </p>
+                            </div>
+                            <!--Card footer-->
+                            <div class="card-footer">
+                                <small class="text-muted"> JavaScript </small>
+                                <a href="https://github.com/adtrahan146/the-peoples-insight">
+                                    <button class="btn btn-secondary float-end"> See More </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             <!--End card group-->
         </div>
         `
