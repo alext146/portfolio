@@ -1,5 +1,5 @@
 export const profile = {
-  name: 'Alex Trahan',
+  name: 'Alex',
   role: 'Full Stack Developer',
   stackLine: 'React | JavaScript | PHP | Go',
   tagline: 'Building web apps and interactive experiences',
