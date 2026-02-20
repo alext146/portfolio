@@ -1,77 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Portfolio of Alex Trahan — software developer focused on web and interactive 3D experiences.">
-        <meta property="og:title" content="Alex Trahan | Portfolio">
-        <meta property="og:description" content="Software developer focused on web and interactive 3D experiences.">
-        <meta property="og:type" content="website">
-        <meta name="theme-color" content="#0b0b0b">
-        <link rel="icon" href="./assets/favicon.png">
-        <title>Alex Trahan | Portfolio</title>
-        <link rel="stylesheet" href="styles/main.css">
-        <link rel="stylesheet" href="styles/bootstrap.min.css">
-        <link rel="stylesheet" href="styles/bootstrap-icons.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Red+Hat+Mono:wght@300&display=swap" rel="stylesheet">
-        <script type="text/javascript" src="./scripts/helper.js"></script>
-    </head>
-    <body>
-        <noscript>
-            <div class="text-white p-3" style="background: #111;">
-                This site uses JavaScript for the 3D background and navigation. Please enable JavaScript.
-            </div>
-        </noscript>
-
-        <!-- Landing page -->
-            <div id="webpage" class="container-fluid bg-transparent red-hat-mono">
-                <div class="display-10 text-white text-center">
-                    <div class="display-2">
-                        <h3 class="animate__animated animate__fadeOutDown animate__delay-2s"> Hello </h3>
-                        <h1 class="animate__animated major-mono-display animate__fadeInDown animate__delay-2s"> <span class="red-hat-mono">I'm</span> Alex </h1>
-                    </div>
-                    <p class="animate__animated animate__fadeInDown animate__delay-3s"> I build web apps and interactive 3D experiences </p>
-                </div>
-                
-
-                <div class="container align-bottom major-mono-display w-25">
-                    <div class="row p-3 animate__animated animate__slideInLeft animate__delay-2s">
-                        <button class="btn btn-outline-light" type="button" onclick="code()">
-                            <i class="bi bi-code-slash"></i> Code
-                        </button>
-                    </div>
-                    <div class="row p-3 animate__animated animate__slideInLeft animate__delay-3s">
-                        <button class="btn btn-outline-light" type="button" onclick="blog()">
-                            <i class="bi bi-chat-dots"></i> Blog
-                        </button>
-                    </div>
-                    
-                    <div class="row p-3 animate__animated animate__slideInLeft animate__delay-4s">
-                        <button class="btn btn-outline-light" type="button" onclick="about()">
-                            <i class="bi bi-person"></i> <span id="my-triangle">&#x25b2;</span>bout
-                        </button>
-                    </div>
-                    
-                    <div class="row p-3 animate__animated animate__slideInLeft animate__delay-5s">
-                        <button class="btn btn-outline-light" type="button" onclick="contact()">
-                            <i class="bi bi-envelope"></i> Contact
-                        </button>
-                    </div>
-                    
-                </div>
-            </div>
-        
-        <script src="SceneManager.js"></script>
-        <script src="./sceneSubjects/Lighting.js"></script>
-        <script src="./sceneSubjects/Mars.js"></script>
-        <script src="./sceneSubjects/Stars.js"></script>
-        <script src="./scripts/form-controller.js"></script>
-        <script src="./scripts/form-model.js"></script>
-        <script type="module" src="main.js"></script>
-        <script type="module" src="./scripts/bootstrap.bundle.min.js"></script>
-
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Portfolio of Alex Trahan — software developer focused on web and interactive 3D experiences." />
+    <meta property="og:title" content="Alex Trahan | Portfolio" />
+    <meta property="og:description" content="Software developer focused on web and interactive 3D experiences." />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0b0b0b" />
+    <link rel="icon" href="/assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Red+Hat+Mono:wght@300;400;600&display=swap" rel="stylesheet" />
+    <title>Alex Trahan | Portfolio</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

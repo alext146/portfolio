@@ -1,38 +1,29 @@
-# Alex Trahan — Portfolio
+# Alex Trahan — Portfolio (React)
 
-Portfolio site built with **Bootstrap** + **Three.js**.
+A React + Vite rewrite of the original portfolio.
 
 ## Quick start
-- Open `index.html` directly, or serve the folder with any static server.
+```bash
+npm install
+npm run dev
+```
 
-## 2026 refresh (local edits)
-- Updated hero/about copy (more modern, less dated)
-- Fixed broken Blog links markup
-- Improved responsive layout for project cards
-- Added meta/OG tags and image alt text
-- Cleaned up CSS issues (invalid rgba values)
+## Scripts
+- `npm run dev` — local dev server
+- `npm run build` — production build
+- `npm run preview` — preview production build
 
-## Customize
-- **Hero tagline:** `index.html`
-- **About text + projects:** `scripts/helper.js`
-- **Styling:** `styles/main.css`
+## Structure
+- `index.html` — Vite entry
+- `src/App.jsx` — main layout
+- `src/styles.css` — global styling
+- `assets/` — images/icons
+
+## Notes
+- Contact form posts to the existing Google Form endpoint.
+- Update project cards in `src/App.jsx`.
 
 ---
 
-## Legacy notes
-### 0.6.2 (04/01/22):
-- Added upload for RockPaperScissors and blog post associated with it.
-
-### 0.6.1 (03/28/22):
-- Added announcement for a group project called EndGameMaps!
-
-### 0.6
-- Implemented contact page (GoogleForms backend).
-- TODO (legacy): adjust Bootstrap/CSS for opacity on Projects/Code page.
-
-### 0.5.1a
-- added link for blog
-
-### 0.5a
-- initial release
-- need to refactor bootstrap layouts to overlay properly with Three's canvas element
+## Legacy notes (pre‑React)
+Older HTML/Three.js assets remain in the repo for reference.
