@@ -15,13 +15,16 @@ npm run dev
 
 ## Structure
 - `index.html` — Vite entry
-- `src/App.jsx` — main layout
+- `src/App.jsx` — app shell
+- `src/components/` — UI sections (Nav, Hero, About, Projects, Blog, Contact, Footer)
+- `src/data/profile.js` — content + links
+- `src/utils/forms.js` — Google Form helpers
 - `src/styles.css` — global styling
-- `assets/` — images/icons
+- `public/assets/` — images/icons
 
 ## Notes
 - Contact form posts to the existing Google Form endpoint.
-- Update project cards in `src/App.jsx`.
+- Update projects/blog content in `src/data/profile.js`.
 
 ---
 
