@@ -17,7 +17,6 @@ export const socialLinks = {
 export const navLinks = [
   { label: 'About', href: '#about' },
   { label: 'Projects', href: '#projects' },
-  { label: 'Blog', href: '#blog' },
   { label: 'Contact', href: '#contact' }
 ];
 
@@ -77,29 +76,3 @@ export const projects = [
   }
 ];
 
-export const blogPosts = [
-  {
-    title: 'Portfolio Website Devlog',
-    subtitle: 'Notes from building this portfolio site.',
-    link: 'https://docs.google.com/document/d/1OxFO_R4YZP1QzMNrB0sCyI87syE3TAy_kpWyo8SOU0k/edit?usp=sharing',
-    image: '/assets/uno.jpg'
-  },
-  {
-    title: 'EndGameMaps Announcement',
-    subtitle: 'Full-stack map application overview.',
-    link: 'https://docs.google.com/document/d/1oj_e-kd38ggQmj2Wall5zBMYDalq_x8YiLDmpq7b-tE/edit?usp=sharing',
-    image: '/assets/7115707.jpg'
-  },
-  {
-    title: 'RockPaperScissors Devlog',
-    subtitle: 'Quick build log for the RPS mini-app.',
-    link: 'https://docs.google.com/document/d/19n0ggmBQJdqIEKKHmK_aFBFLt4RfmzJUzTo4D_qUBKo/edit?usp=sharing',
-    image: '/assets/rock-paper-scissors.png'
-  },
-  {
-    title: 'Russian Revolution Research',
-    subtitle: 'Research paper written during my Political Science studies.',
-    link: 'https://docs.google.com/document/d/1qPNUk5y2OdoBan4WULltoVwxgttHU7Nrv7F1-n-MaBc/edit?usp=sharing',
-    image: '/assets/imperial-flag.jpg'
-  }
-];
