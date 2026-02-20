@@ -55,23 +55,23 @@ export const projects = [
   {
     title: 'French AI-de',
     description:
-      'React Native language companion that simulates French conversations with auth flow and multi-screen navigation.',
-    stack: 'React Native, Expo, React Navigation',
-    link: 'https://github.com/adtrahan146/french-learner',
+      'Private research prototype exploring conversational French practice with multi-screen flows.',
+    stack: 'React Native, Expo',
+    link: null,
     image: null
   },
   {
     title: 'Spanish Learner',
-    description: 'React Native (Expo) learning app foundation for Spanish vocabulary practice.',
+    description: 'Private research prototype for Spanish vocabulary practice and guided drills.',
     stack: 'React Native, Expo',
-    link: 'https://github.com/adtrahan146/span-learner',
+    link: null,
     image: null
   },
   {
     title: 'Polish Learner',
-    description: 'React Native (Expo) learning app foundation for Polish vocabulary practice.',
+    description: 'Private research prototype for Polish vocabulary practice and review sessions.',
     stack: 'React Native, Expo',
-    link: 'https://github.com/adtrahan146/polish-learner',
+    link: null,
     image: null
   }
 ];

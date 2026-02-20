@@ -24,9 +24,13 @@ export default function Projects() {
               </div>
               <div className="card__footer">
                 <span>{project.stack}</span>
-                <a href={project.link} target="_blank" rel="noopener" className="btn btn--ghost">
-                  View repo
-                </a>
+                {project.link ? (
+                  <a href={project.link} target="_blank" rel="noopener" className="btn btn--ghost">
+                    View repo
+                  </a>
+                ) : (
+                  <span className="tag">Private</span>
+                )}
               </div>
             </article>
           ))}
