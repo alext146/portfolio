@@ -186,7 +186,7 @@ export default function App() {
                 <span className="accent">.</span>
               </h1>
               <p>
-                I focus on full‑stack web work, thoughtful UI, and creative projects that blend code and design.
+                Skilled in modernizing front-end architectures and building responsive, real-time interfaces for high-reliability systems. Comfortable in performance- and stability-critical environments, including control systems and embedded-adjacent platforms.
               </p>
               <div className="hero__cta">
                 <a className="btn" href="#projects">View projects</a>
@@ -216,8 +216,9 @@ export default function App() {
             <div className="section__header">
               <h2>About</h2>
               <p>
-                I build modern, responsive web apps and interactive 3D experiences with an emphasis on clarity,
-                performance, and storytelling.
+                Proficient in React, JavaScript, Node.js, PHP, Java, React Native, Linux/WSL2, AWS, Docker, MySQL, Git,
+                CI/CD (Jenkins), Jest, TDD, and Atlassian tools. B.S. Computer Science — Certified in Software Engineering
+                (University of New Orleans).
               </p>
             </div>
             <div className="about">
