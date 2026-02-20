@@ -8,6 +8,13 @@ const entryMap = {
   message: 'entry.2073569407'
 };
 
+const navLinks = [
+  { label: 'About', href: '#about' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Blog', href: '#blog' },
+  { label: 'Contact', href: '#contact' }
+];
+
 const projects = [
   {
     title: 'War Empathy',
@@ -91,6 +98,8 @@ const buildFormUrl = (values) => {
 
 export default function App() {
   const [status, setStatus] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [formValues, setFormValues] = useState({
     name: '',
     email: '',
@@ -102,7 +111,7 @@ export default function App() {
     () => [
       { label: 'Focus', value: 'Web + Interactive 3D' },
       { label: 'Background', value: 'Computer Science (UNO)' },
-      { label: 'Location', value: 'MS Gulf Coast' }
+      { label: 'Availability', value: 'Open to opportunities' }
     ],
     []
   );
@@ -112,8 +121,11 @@ export default function App() {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleNavClick = () => setMenuOpen(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSending(true);
     setStatus('Sending...');
     try {
       const url = buildFormUrl(formValues);
@@ -122,6 +134,8 @@ export default function App() {
       setFormValues({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
       setStatus('Something went wrong. Please try again.');
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -132,11 +146,24 @@ export default function App() {
           <a className="nav__brand" href="#top">
             Alex Trahan
           </a>
-          <nav className="nav__links">
-            <a href="#about">About</a>
-            <a href="#projects">Projects</a>
-            <a href="#blog">Blog</a>
-            <a href="#contact">Contact</a>
+          <button
+            className="nav__toggle"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="primary-navigation"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? 'Close' : 'Menu'}
+          </button>
+          <nav
+            id="primary-navigation"
+            className={`nav__links ${menuOpen ? 'nav__links--open' : ''}`}
+          >
+            {navLinks.map((link) => (
+              <a key={link.href} href={link.href} onClick={handleNavClick}>
+                {link.label}
+              </a>
+            ))}
           </nav>
           <div className="nav__actions">
             <a className="btn btn--ghost" href="https://github.com/adtrahan146" target="_blank" rel="noopener">
@@ -305,8 +332,14 @@ export default function App() {
                     required
                   />
                 </div>
-                <button className="btn" type="submit">Send message</button>
-                {status && <span className="status">{status}</span>}
+                <button className="btn" type="submit" disabled={isSending}>
+                  {isSending ? 'Sending…' : 'Send message'}
+                </button>
+                {status && (
+                  <span className="status" role="status" aria-live="polite">
+                    {status}
+                  </span>
+                )}
               </form>
               <div className="contact__card">
                 <h3>Find me online</h3>
