@@ -78,23 +78,9 @@ export const skillGroups = [
 
 export const projects = [
   {
-    title: 'French AI-de',
+    title: 'Language Learners Suite',
     description:
-      'Private research prototype exploring conversational French practice with multi-screen flows.',
-    stack: 'React Native, Expo',
-    link: null,
-    image: null
-  },
-  {
-    title: 'Spanish Learner',
-    description: 'Private research prototype for Spanish vocabulary practice and guided drills.',
-    stack: 'React Native, Expo',
-    link: null,
-    image: null
-  },
-  {
-    title: 'Polish Learner',
-    description: 'Private research prototype for Polish vocabulary practice and review sessions.',
+      'Private research prototypes for French, Spanish, and Polish learning apps focused on conversational practice, drills, and review flows.',
     stack: 'React Native, Expo',
     link: null,
     image: null
