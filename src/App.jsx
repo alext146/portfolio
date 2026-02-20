@@ -76,16 +76,29 @@ const blogPosts = [
   }
 ];
 
-const skills = [
-  'JavaScript',
-  'React',
-  'Node.js',
-  'HTML/CSS',
-  'Three.js',
-  'MongoDB',
-  'Java',
-  'C/C++',
-  'C#'
+const capabilities = [
+  'Modernizing front‑end architectures and component libraries',
+  'Responsive, real‑time interfaces for high‑reliability systems',
+  'Performance and stability for control‑system / embedded‑adjacent platforms'
+];
+
+const skillGroups = [
+  {
+    title: 'Frontend',
+    items: ['React', 'JavaScript', 'React Native', 'HTML/CSS']
+  },
+  {
+    title: 'Backend',
+    items: ['Node.js', 'PHP', 'Java', 'MySQL']
+  },
+  {
+    title: 'DevOps',
+    items: ['AWS', 'Docker', 'CI/CD (Jenkins)']
+  },
+  {
+    title: 'Quality + Tools',
+    items: ['Git', 'Jest', 'TDD', 'Atlassian', 'Linux', 'WSL2']
+  }
 ];
 
 const buildFormUrl = (values) => {
@@ -109,8 +122,8 @@ export default function App() {
 
   const heroStats = useMemo(
     () => [
-      { label: 'Focus', value: 'Web + Interactive 3D' },
-      { label: 'Background', value: 'Computer Science (UNO)' },
+      { label: 'Focus', value: 'Real‑time web interfaces' },
+      { label: 'Stack', value: 'React + Node.js' },
       { label: 'Availability', value: 'Open to opportunities' }
     ],
     []
@@ -223,20 +236,35 @@ export default function App() {
             </div>
             <div className="about">
               <div>
-                <h3>What I’m into</h3>
+                <h3>What I do</h3>
                 <ul>
-                  <li>Full‑stack JavaScript projects with clean UI/UX</li>
-                  <li>Creative coding (Three.js, WebGL, data‑driven visuals)</li>
-                  <li>Shipping practical products and polished interfaces</li>
+                  <li>Ship responsive, real‑time web interfaces with clean UX</li>
+                  <li>Modernize front‑end architectures and component systems</li>
+                  <li>Deliver stable, testable features with CI/CD pipelines</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Capabilities</h3>
+                <ul>
+                  {capabilities.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
                 </ul>
               </div>
               <div>
                 <h3>Skills</h3>
-                <div className="chip-grid">
-                  {skills.map((skill) => (
-                    <span className="chip" key={skill}>
-                      {skill}
-                    </span>
+                <div className="skill-groups">
+                  {skillGroups.map((group) => (
+                    <div className="skill-group" key={group.title}>
+                      <span className="skill-group__title">{group.title}</span>
+                      <div className="chip-grid">
+                        {group.items.map((skill) => (
+                          <span className="chip" key={skill}>
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -353,6 +381,7 @@ export default function App() {
                     LinkedIn
                   </a>
                 </div>
+                <p className="muted">Resume available upon request.</p>
               </div>
             </div>
           </div>
