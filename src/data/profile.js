@@ -1,11 +1,12 @@
 export const profile = {
   name: 'Alex Trahan',
-  role: 'Software developer',
+  role: 'Full Stack Developer',
+  stackLine: 'React | JavaScript | PHP | Go',
   tagline: 'Building web apps and interactive experiences',
   heroDescription:
     'Skilled in modernizing front-end architectures and building responsive, real-time interfaces for high-reliability systems. Comfortable in performance- and stability-critical environments, including control systems and embedded-adjacent platforms.',
   aboutDescription:
-    'Proficient in React, JavaScript, Node.js, PHP, Java, React Native, Linux/WSL2, AWS, Docker, MySQL, Git, CI/CD (Jenkins), Jest, TDD, and Atlassian tools. B.S. Computer Science — Certified in Software Engineering (University of New Orleans).'
+    'Proficient in React, JavaScript, Node.js, PHP, Go, Java, React Native, Linux/WSL2, AWS, Docker, MySQL, Git, CI/CD (Jenkins), Jest, TDD, and Atlassian tools. B.S. Computer Science — Certified in Software Engineering (University of New Orleans).'
 };
 
 export const socialLinks = {
@@ -39,7 +40,7 @@ export const skillGroups = [
   },
   {
     title: 'Backend',
-    items: ['Node.js', 'PHP', 'Java', 'MySQL']
+    items: ['Node.js', 'PHP', 'Go', 'Java', 'MySQL']
   },
   {
     title: 'DevOps',
@@ -53,23 +54,24 @@ export const skillGroups = [
 
 export const projects = [
   {
-    title: 'French Learner',
-    description: 'Language learning app focused on French vocabulary and practice modules.',
-    stack: 'React, JavaScript',
+    title: 'French AI-de',
+    description:
+      'React Native language companion that simulates French conversations with auth flow and multi-screen navigation.',
+    stack: 'React Native, Expo, React Navigation',
     link: 'https://github.com/adtrahan146/french-learner',
     image: null
   },
   {
     title: 'Spanish Learner',
-    description: 'Language learning app focused on Spanish vocabulary and guided drills.',
-    stack: 'React, JavaScript',
+    description: 'React Native (Expo) learning app foundation for Spanish vocabulary practice.',
+    stack: 'React Native, Expo',
     link: 'https://github.com/adtrahan146/span-learner',
     image: null
   },
   {
     title: 'Polish Learner',
-    description: 'Language learning app focused on Polish practice sessions and quizzes.',
-    stack: 'React, JavaScript',
+    description: 'React Native (Expo) learning app foundation for Polish vocabulary practice.',
+    stack: 'React Native, Expo',
     link: 'https://github.com/adtrahan146/polish-learner',
     image: null
   }
