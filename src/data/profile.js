@@ -78,9 +78,9 @@ export const skillGroups = [
 
 export const projects = [
   {
-    title: 'Language Learners Suite',
+    title: 'Language Learners (Research Project)',
     description:
-      'Private research prototypes for French, Spanish, and Polish learning apps focused on conversational practice, drills, and review flows.',
+      'Single private research project delivered in three language variants (French, Spanish, Polish) covering conversational practice, drills, and review flows.',
     stack: 'React Native, Expo',
     link: null,
     image: null
