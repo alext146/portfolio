@@ -411,6 +411,40 @@ img {
   opacity: 0.9;
 }
 
+.experience {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.experience__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.experience ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.experience ul li {
+  position: relative;
+  padding-left: 1.2rem;
+  line-height: 1.5;
+}
+
+.experience ul li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #94f9c7;
+}
+
 .contact {
   display: grid;
   gap: 2rem;

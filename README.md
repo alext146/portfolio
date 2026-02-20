@@ -16,7 +16,7 @@ npm run dev
 ## Structure
 - `index.html` — Vite entry
 - `src/App.jsx` — app shell
-- `src/components/` — UI sections (Nav, Hero, About, Projects, Contact, Footer)
+- `src/components/` — UI sections (Nav, Hero, About, Experience, Projects, Contact, Footer)
 - `src/data/profile.js` — content + links
 - `src/utils/forms.js` — Google Form helpers
 - `src/styles.css` — global styling
