@@ -16,6 +16,7 @@ export const socialLinks = {
 
 export const navLinks = [
   { label: 'About', href: '#about' },
+  { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
   { label: 'Contact', href: '#contact' }
 ];
@@ -30,6 +31,20 @@ export const capabilities = [
   'Modernizing front-end architectures and component libraries',
   'Responsive, real-time interfaces for high-reliability systems',
   'Performance and stability for control-system / embedded-adjacent platforms'
+];
+
+export const experience = [
+  {
+    title: 'Lead Developer / Research Co-Author',
+    org: 'Computer Science Dept., University of New Orleans',
+    dates: 'Jan 2023 – Jul 2023',
+    bullets: [
+      'Led a team to identify vulnerabilities in mobile applications alongside a university doctor.',
+      'Delivered an end-to-end mobile app with React Native, Node.js, and OpenAI GPT features.',
+      'Used MongoDB data pipelines to support vulnerability analysis for publication.',
+      'Applied Kanban methodology and maintained close stakeholder communication.'
+    ]
+  }
 ];
 
 export const skillGroups = [
