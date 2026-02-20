@@ -24,7 +24,7 @@ export const navLinks = [
 export const heroStats = [
   { label: 'Focus', value: 'Real-time web interfaces' },
   { label: 'Stack', value: 'React + Node.js' },
-  { label: 'Availability', value: 'Open to opportunities' }
+  { label: 'Experience', value: '3+ years full-stack' }
 ];
 
 export const capabilities = [
@@ -34,6 +34,16 @@ export const capabilities = [
 ];
 
 export const experience = [
+  {
+    title: 'Full Stack Engineer',
+    org: 'Unmanned Autonomous Submersibles (Public Company)',
+    dates: 'Current',
+    bullets: [
+      '3+ years building full-stack systems for autonomous submersible operations.',
+      'Focus on reliability, performance, and real-time interfaces for mission workflows.',
+      'Collaborate across software and hardware teams to ship stable releases.'
+    ]
+  },
   {
     title: 'Lead Developer / Research Co-Author',
     org: 'Computer Science Dept., University of New Orleans',
