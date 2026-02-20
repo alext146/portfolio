@@ -1,22 +1,38 @@
-# Alex Trahan - Portfolio
-My portflio utilizing Bootstrap &amp; Three.js: a javascript library for creating 3d environments in browser.
+# Alex Trahan — Portfolio
 
-## Releases: 
+Portfolio site built with **Bootstrap** + **Three.js**.
+
+## Quick start
+- Open `index.html` directly, or serve the folder with any static server.
+
+## 2026 refresh (local edits)
+- Updated hero/about copy (more modern, less dated)
+- Fixed broken Blog links markup
+- Improved responsive layout for project cards
+- Added meta/OG tags and image alt text
+- Cleaned up CSS issues (invalid rgba values)
+
+## Customize
+- **Hero tagline:** `index.html`
+- **About text + projects:** `scripts/helper.js`
+- **Styling:** `styles/main.css`
+
+---
+
+## Legacy notes
 ### 0.6.2 (04/01/22):
-	- Added upload for RockPaperScissors and blog post associated with it.
-	
+- Added upload for RockPaperScissors and blog post associated with it.
+
 ### 0.6.1 (03/28/22):
-	- Added announcement for a group project called EndGameMaps!
+- Added announcement for a group project called EndGameMaps!
 
 ### 0.6
-	- Successfully implemented contact page, so now messages are sent to myself.  Using GoogleForms as DB.
-	
-Still am looking for time to reformat About page to properly fit onto screens especially mobile.
-Also must still adjust Boostrap and CSS to fix opacity on Projects/Code page.
+- Implemented contact page (GoogleForms backend).
+- TODO (legacy): adjust Bootstrap/CSS for opacity on Projects/Code page.
 
 ### 0.5.1a
-	-added link for blog
-   
+- added link for blog
+
 ### 0.5a
-	- initial release
-   	- need to refactor bootstrap layouts to overlay properly with Three's canvas element
+- initial release
+- need to refactor bootstrap layouts to overlay properly with Three's canvas element

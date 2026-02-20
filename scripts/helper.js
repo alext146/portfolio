@@ -131,64 +131,56 @@ function blog(){
                 <!--Slide 1:-->
                 <div id="slide-1" class="carousel-item active">
                     <div class="blog-gradient">
-                        <img class="blog-img" src="./assets/uno.jpg">
+                        <img class="blog-img" src="./assets/uno.jpg" alt="UNO campus">
                     </div>
                     <div class="carousel-caption">
                         <h5> Portfolio Website Devlog </h5>
                         <p>
                             <small> Cataloguing my experience in development of my portfolio page! </small>
                         </p>
-                        <a href="https://docs.google.com/document/d/1OxFO_R4YZP1QzMNrB0sCyI87syE3TAy_kpWyo8SOU0k/edit?usp=sharing"
-                            <button class="btn btn-secondary" href="#"> Read More </button>
-                        </a>
+                        <a class="btn btn-secondary" href="https://docs.google.com/document/d/1OxFO_R4YZP1QzMNrB0sCyI87syE3TAy_kpWyo8SOU0k/edit?usp=sharing" target="_blank" rel="noopener">Read More</a>
                     </div>
                 </div>
 
                 <!--Slide 2:-->
                 <div id="slide-2" class="carousel-item">
                     <div class="blog-gradient justify-content-center">
-                        <img class="blog-img" src="./assets/7115707.jpg">
+                        <img class="blog-img" src="./assets/7115707.jpg" alt="EndGameMaps preview">
                     </div>
                     <div class="carousel-caption">
                         <h5> EndGameMaps Announcement </h5>
                         <p>
                             <small> Full stack map application </small>
                         </p>
-                        <a href="https://docs.google.com/document/d/1oj_e-kd38ggQmj2Wall5zBMYDalq_x8YiLDmpq7b-tE/edit?usp=sharing"
-                            <button class="btn btn-secondary" href="#"> Read More </button>
-                        </a>
+                        <a class="btn btn-secondary" href="https://docs.google.com/document/d/1oj_e-kd38ggQmj2Wall5zBMYDalq_x8YiLDmpq7b-tE/edit?usp=sharing" target="_blank" rel="noopener">Read More</a>
                     </div>
                 </div>
 
                 <!--Slide 3:-->
                 <div id="slide-3" class="carousel-item">
                     <div class="blog-gradient justify-content-center">
-                        <img class="blog-img" src="./assets/rock-paper-scissors.png">
+                        <img class="blog-img" src="./assets/rock-paper-scissors.png" alt="Rock Paper Scissors screenshot">
                     </div>
                     <div class="carousel-caption">
                         <h5> RockPaperScissors Devlog </h5>
                         <p>
                             <small> Cataloging my small rock, paper, scissors game! </small>
                         </p>
-                        <a href="https://docs.google.com/document/d/19n0ggmBQJdqIEKKHmK_aFBFLt4RfmzJUzTo4D_qUBKo/edit?usp=sharing"
-                            <button class="btn btn-secondary" href="#"> Read More </button>
-                        </a>
+                        <a class="btn btn-secondary" href="https://docs.google.com/document/d/19n0ggmBQJdqIEKKHmK_aFBFLt4RfmzJUzTo4D_qUBKo/edit?usp=sharing" target="_blank" rel="noopener">Read More</a>
                     </div>
                 </div>
 
                 <!--Slide 4:-->
                 <div id="slide-4" class="carousel-item">
                     <div class="blog-gradient justify-content-center">
-                        <img class="blog-img" src="./assets/imperial-flag.jpg">
+                        <img class="blog-img" src="./assets/imperial-flag.jpg" alt="Research paper cover">
                     </div>
                     <div class="carousel-caption">
                         <h5> Events and Impacts of the Russian Revolution </h5>
                         <p>
                             <small> A research paper I wrote during my time as a Political Science student regarding the Russian Revolution. </small>
                         </p>
-                        <a href="https://docs.google.com/document/d/1qPNUk5y2OdoBan4WULltoVwxgttHU7Nrv7F1-n-MaBc/edit?usp=sharing"
-                            <button class="btn btn-secondary" href="#"> Read More </button>
-                        </a>
+                        <a class="btn btn-secondary" href="https://docs.google.com/document/d/1qPNUk5y2OdoBan4WULltoVwxgttHU7Nrv7F1-n-MaBc/edit?usp=sharing" target="_blank" rel="noopener">Read More</a>
                     </div>
                 </div>
                 
@@ -262,10 +254,10 @@ function about(){
                 <!--Column 1:-->
                 <div class="text-center col-md-2">
                     <h4 class="lead"> Alex Trahan </h4>
-                    <img id="myThumb" class="img-thumbnail w-50" src="./assets/100_0541.JPG">
+                    <img id="myThumb" class="img-thumbnail w-50" src="./assets/100_0541.JPG" alt="Portrait thumbnail">
                     <div class="d-flex justify-content-center gap-4 m-4">
-                        <a href="https://www.linkedin.com/in/alext146/" class="text-white"> <i class="bi bi-linkedin"></i> </a>
-                        <a href="https://github.com/adtrahan146" class="text-white"> <i class="bi bi-github"></i> </a>
+                        <a href="https://www.linkedin.com/in/alext146/" class="text-white" target="_blank" rel="noopener"> <i class="bi bi-linkedin"></i> </a>
+                        <a href="https://github.com/adtrahan146" class="text-white" target="_blank" rel="noopener"> <i class="bi bi-github"></i> </a>
                     </div>
                     
                     <div class="d-flex row row-cols-1 d-md-block d-none">
@@ -284,13 +276,10 @@ function about(){
                     <div class="row">
                         <div class="col-md-8 col-12">
                             <h1>Alex Trahan</h1>
-                            <p class="indent"> Hello, my name's Alex.  I'm currently a junior studying Computer Science
-                            at the University of New Orleans.  <strike>I've also taken multiple liberal arts courses relating to Political Science.</strike>
-                            I'm most recently working in sales, but aspiring for a software development job.
-                            I'm also a human, so feel free to contact! </p>
+                            <p class="indent"> Hi, I’m Alex — a software developer focused on web and interactive experiences. I enjoy building full‑stack projects and creative front‑ends (especially with Three.js). I’m always open to new opportunities and collaborations — feel free to reach out. </p>
                         </div>
                         <div class="col-md-2 d-md-block d-none">
-                            <img class="img-fluid alex" src="./assets/profile-image.png">
+                            <img class="img-fluid alex" src="./assets/profile-image.png" alt="Alex portrait">
                         </div>
                     </div>
 
@@ -371,11 +360,11 @@ function code(){
                 <div class="row mx-auto">
 
                     <!--Card 1-->
-                    <div class="col-3 my-5 d-flex">
-                        <div class="card bg-dark text-center" style="width: 18rem;">
+                    <div class="col-12 col-md-6 col-lg-4 my-4 d-flex">
+                        <div class="card bg-dark text-center" style="width: 100%;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
-                                <img class="img-thumbnail" src="./assets/waremp.png">
+                                <img class="img-thumbnail" src="./assets/waremp.png" alt="War Empathy screenshot">
                             </div>
                             <!--Card body-->
                             <div class="card-body">
@@ -387,7 +376,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer opaque-regular">
                                 <small class="text-muted"> HTML, CSS </small>
-                                <a href="https://github.com/adtrahan146/war-emp">
+                                <a href="https://github.com/adtrahan146/war-emp" target="_blank" rel="noopener">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
@@ -395,11 +384,11 @@ function code(){
                     </div>
 
                     <!--Card 2:-->
-                    <div class="col-3 my-5 d-flex">
-                        <div class="card bg-dark text-center" style="width: 18rem;">
+                    <div class="col-12 col-md-6 col-lg-4 my-4 d-flex">
+                        <div class="card bg-dark text-center" style="width: 100%;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
-                                <img class="img-thumbnail" src="./assets/7115707.jpg">
+                                <img class="img-thumbnail" src="./assets/7115707.jpg" alt="EndGameMaps screenshot">
                             </div>
                             <!--Card body-->
                             <div class="card-body opaque-regular">
@@ -411,7 +400,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer">
                                 <small class="text-muted"> JavaScript </small>
-                                <a href="https://github.com/adtrahan146/EndGameMaps">
+                                <a href="https://github.com/adtrahan146/EndGameMaps" target="_blank" rel="noopener">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
@@ -419,11 +408,11 @@ function code(){
                     </div>
 
                     <!--Card 3:-->
-                    <div class="col-3 my-5 d-flex">
-                        <div class="card bg-dark text-center" style="width: 18rem;">
+                    <div class="col-12 col-md-6 col-lg-4 my-4 d-flex">
+                        <div class="card bg-dark text-center" style="width: 100%;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
-                                <img class="img-thumbnail" src="./assets/rockpaperscissorsicon.png">
+                                <img class="img-thumbnail" src="./assets/rockpaperscissorsicon.png" alt="Rock Paper Scissors icon">
                             </div>
                             <!--Card body-->
                             <div class="card-body opaque-regular">
@@ -435,7 +424,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer opaque-regular">
                                 <small class="text-muted"> JavaScript </small>
-                                <a href="https://github.com/adtrahan146/RockPaperScissors">
+                                <a href="https://github.com/adtrahan146/RockPaperScissors" target="_blank" rel="noopener">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
@@ -443,11 +432,11 @@ function code(){
                     </div>
 
                     <!--Card 4:-->
-                    <div class="col-3 my-5 d-flex">
-                        <div class="card bg-dark text-center" style="width: 18rem;">
+                    <div class="col-12 col-md-6 col-lg-4 my-4 d-flex">
+                        <div class="card bg-dark text-center" style="width: 100%;">
                             <!--Card header-->
                             <div class="card-header bg-transparent">
-                                <img class="img-thumbnail" src="./assets/peoples.png">
+                                <img class="img-thumbnail" src="./assets/peoples.png" alt="The People's Insight screenshot">
                             </div>
                             <!--Card body-->
                             <div class="card-body opaque-regular">
@@ -459,7 +448,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer">
                                 <small class="text-muted"> JavaScript </small>
-                                <a href="https://github.com/adtrahan146/the-peoples-insight">
+                                <a href="https://github.com/adtrahan146/the-peoples-insight" target="_blank" rel="noopener">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
