@@ -28,7 +28,7 @@ export default function Hero() {
           <img src="/assets/profile-image.png" alt="Alex portrait" />
           <div className="hero__card-text">
             <strong>{profile.name}</strong>
-            <span>Web + interactive developer</span>
+            <span>{profile.stackLine}</span>
           </div>
         </div>
       </div>
