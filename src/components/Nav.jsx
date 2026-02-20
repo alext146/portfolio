@@ -27,9 +27,6 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
           <a className="btn btn--ghost" href={socialLinks.github} target="_blank" rel="noopener">
             GitHub
           </a>
-          <a className="btn" href={socialLinks.linkedin} target="_blank" rel="noopener">
-            LinkedIn
-          </a>
         </div>
       </div>
     </header>
