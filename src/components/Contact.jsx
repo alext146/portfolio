@@ -78,13 +78,10 @@ export default function Contact() {
           </form>
           <div className="contact__card">
             <h3>Find me online</h3>
-            <p>Reach out through LinkedIn or check out my latest code on GitHub.</p>
+            <p>Check out my latest work on GitHub.</p>
             <div className="contact__links">
               <a className="btn btn--ghost" href={socialLinks.github} target="_blank" rel="noopener">
                 GitHub
-              </a>
-              <a className="btn" href={socialLinks.linkedin} target="_blank" rel="noopener">
-                LinkedIn
               </a>
             </div>
             <p className="muted">Resume available upon request.</p>

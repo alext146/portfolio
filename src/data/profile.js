@@ -10,8 +10,7 @@ export const profile = {
 };
 
 export const socialLinks = {
-  github: 'https://github.com/adtrahan146',
-  linkedin: 'https://www.linkedin.com/in/alext146/'
+  github: 'https://github.com/adtrahan146'
 };
 
 export const navLinks = [
