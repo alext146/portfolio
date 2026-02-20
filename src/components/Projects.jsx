@@ -11,7 +11,13 @@ export default function Projects() {
         <div className="grid">
           {projects.map((project) => (
             <article className="card" key={project.title}>
-              <img src={project.image} alt={`${project.title} preview`} />
+              {project.image ? (
+                <img src={project.image} alt={`${project.title} preview`} />
+              ) : (
+                <div className="card__media">
+                  <span>{project.title}</span>
+                </div>
+              )}
               <div className="card__body">
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Nav from './components/Nav';
+import MarsBackground from './components/MarsBackground';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <MarsBackground />
       <Nav
         menuOpen={menuOpen}
         onToggle={() => setMenuOpen((open) => !open)}
