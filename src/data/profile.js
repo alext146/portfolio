@@ -53,34 +53,25 @@ export const skillGroups = [
 
 export const projects = [
   {
-    title: 'War Empathy',
-    description:
-      'An HTML-based RPG with minimal CSS styling to bring awareness to geopolitical crises.',
-    stack: 'HTML, CSS',
-    link: 'https://github.com/adtrahan146/war-emp',
-    image: '/assets/waremp.png'
+    title: 'French Learner',
+    description: 'Language learning app focused on French vocabulary and practice modules.',
+    stack: 'React, JavaScript',
+    link: 'https://github.com/adtrahan146/french-learner',
+    image: null
   },
   {
-    title: 'End Game Maps',
-    description:
-      'Full stack map app using Leaflet.js and user-generated pins. Early full-stack milestone.',
-    stack: 'JavaScript',
-    link: 'https://github.com/adtrahan146/EndGameMaps',
-    image: '/assets/7115707.jpg'
+    title: 'Spanish Learner',
+    description: 'Language learning app focused on Spanish vocabulary and guided drills.',
+    stack: 'React, JavaScript',
+    link: 'https://github.com/adtrahan146/span-learner',
+    image: null
   },
   {
-    title: 'Rock, Paper, Scissors',
-    description: 'A small rock/paper/scissors single-page app using DOM events.',
-    stack: 'JavaScript',
-    link: 'https://github.com/adtrahan146/RockPaperScissors',
-    image: '/assets/rockpaperscissorsicon.png'
-  },
-  {
-    title: "The People's Insight",
-    description: "News app that pulls the day's top posts from various news subreddits.",
-    stack: 'JavaScript',
-    link: 'https://github.com/adtrahan146/the-peoples-insight',
-    image: '/assets/peoples.png'
+    title: 'Polish Learner',
+    description: 'Language learning app focused on Polish practice sessions and quizzes.',
+    stack: 'React, JavaScript',
+    link: 'https://github.com/adtrahan146/polish-learner',
+    image: null
   }
 ];
 
