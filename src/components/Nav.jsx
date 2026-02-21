@@ -4,6 +4,8 @@ import { navLinks, profile, socialLinks } from '../data/profile';
 export default function Nav({ menuOpen, onToggle, onNavClick }) {
   const [navHidden, setNavHidden] = useState(false);
   const lastScrollY = useRef(0);
+  const lastViewportHeight = useRef(0);
+  const suppressHideUntil = useRef(0);
   const scrollDirection = useRef(0);
   const directionTravel = useRef(0);
   const ticking = useRef(false);
@@ -28,6 +30,19 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
       const viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
       const currentScrollRaw = Math.max(0, window.scrollY || document.documentElement.scrollTop);
       const currentScroll = Math.min(currentScrollRaw, Math.max(maxScrollY, 0));
+      const now = performance.now();
+
+      if (lastViewportHeight.current === 0) {
+        lastViewportHeight.current = viewportHeight;
+      }
+      const viewportDelta = Math.abs(viewportHeight - lastViewportHeight.current);
+      if (isMobile && viewportDelta >= 40) {
+        // Mobile browser bars changing size can cause false hide/show toggles; keep nav visible briefly.
+        suppressHideUntil.current = now + 420;
+        setNavHidden(false);
+        resetTravel();
+      }
+      lastViewportHeight.current = viewportHeight;
 
       if (!isMobile || menuOpen) {
         setNavHidden(false);
@@ -36,15 +51,16 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
         return;
       }
 
+      const hideSuppressed = now < suppressHideUntil.current;
       const delta = currentScroll - lastScrollY.current;
       const TOP_SAFE_ZONE_PX = 32;
-      const BOTTOM_SAFE_ZONE_MIN_PX = 108;
-      const BOTTOM_SAFE_ZONE_RATIO = 0.2;
+      const BOTTOM_SAFE_ZONE_MIN_PX = 160;
+      const BOTTOM_SAFE_ZONE_RATIO = 0.28;
       const bottomSafeZonePx = Math.max(BOTTOM_SAFE_ZONE_MIN_PX, viewportHeight * BOTTOM_SAFE_ZONE_RATIO);
       const nearTop = currentScroll < TOP_SAFE_ZONE_PX;
       const nearBottom = maxScrollY - currentScroll <= bottomSafeZonePx;
 
-      if (nearTop || nearBottom) {
+      if (nearTop || nearBottom || hideSuppressed) {
         setNavHidden(false);
         resetTravel();
       } else if (Math.abs(delta) >= 0.5) {
@@ -93,10 +109,14 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
     updateVisibility();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', updateVisibility);
+    window.visualViewport?.addEventListener('resize', updateVisibility);
+    window.visualViewport?.addEventListener('scroll', updateVisibility);
 
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', updateVisibility);
+      window.visualViewport?.removeEventListener('resize', updateVisibility);
+      window.visualViewport?.removeEventListener('scroll', updateVisibility);
     };
   }, [menuOpen]);
 

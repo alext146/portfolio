@@ -21,7 +21,9 @@ const FISH_PARALLAX_DEPTH_BASE = 36;
 const FISH_PARALLAX_DEPTH_TOP_SCALE = 196;
 const FISH_PARALLAX_MICRO_SCROLL_BASE = 4;
 const FISH_PARALLAX_MICRO_SCROLL_TOP_SCALE = 10;
-const FISH_SCROLL_PARALLAX_MAX_SHIFT = 360;
+const FISH_PARALLAX_SCROLL_PROGRESS_BASE = 0.1;
+const FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE = 0.24;
+const FISH_SCROLL_PARALLAX_MAX_SHIFT = 560;
 const MOBILE_RESIZE_WIDTH_IGNORE_PX = 24;
 const MOBILE_RESIZE_HEIGHT_IGNORE_PX = 120;
 const DESKTOP_FISH_DENSITY = 1;
@@ -298,17 +300,25 @@ const shouldHandleViewportResize = (previousViewport, nextViewport) => {
 	return widthDelta >= MOBILE_RESIZE_WIDTH_IGNORE_PX || heightDelta >= MOBILE_RESIZE_HEIGHT_IGNORE_PX;
 };
 
-const getFishParallaxShift = (fish, depthValue, scrollValue, viewportHeight) => {
+const getFishParallaxShift = (fish, depthValue, scrollValue, scrollProgress, viewportHeight) => {
 	const topWeight = 1 - clamp(fish.yUnit, 0, 1);
 	const depthShift =
 		-clamp(depthValue, 0, 1) * (FISH_PARALLAX_DEPTH_BASE + topWeight * FISH_PARALLAX_DEPTH_TOP_SCALE);
+	const progressShift =
+		-clamp(scrollProgress, 0, 1) *
+		viewportHeight *
+		(FISH_PARALLAX_SCROLL_PROGRESS_BASE + topWeight * FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE);
 	const scrollScreens = scrollValue / Math.max(viewportHeight, 1);
 	const microScrollShift = -(
 		scrollScreens *
 		(FISH_PARALLAX_MICRO_SCROLL_BASE + topWeight * FISH_PARALLAX_MICRO_SCROLL_TOP_SCALE)
 	);
 
-	return clamp(depthShift + microScrollShift, -FISH_SCROLL_PARALLAX_MAX_SHIFT, FISH_SCROLL_PARALLAX_MAX_SHIFT);
+	return clamp(
+		depthShift + progressShift + microScrollShift,
+		-FISH_SCROLL_PARALLAX_MAX_SHIFT,
+		FISH_SCROLL_PARALLAX_MAX_SHIFT
+	);
 };
 
 const wrapFishRenderY = (y, viewportHeight) => {
@@ -721,7 +731,7 @@ const advanceAndWrapPosition = (fish, viewport, dt) => {
 	}
 };
 
-const renderFishNode = (fish, laneMap, depthRef, scrollRef) => {
+const renderFishNode = (fish, laneMap, depthRef, scrollRef, scrollProgressRef) => {
 	const node = laneMap.get(fish.id);
 	if (!node) return;
 
@@ -731,6 +741,7 @@ const renderFishNode = (fish, laneMap, depthRef, scrollRef) => {
 		fish,
 		depthRef.current,
 		scrollRef.current,
+		scrollProgressRef.current,
 		viewportHeight
 	);
 	const renderY = wrapFishRenderY(fish.y + parallaxShift, viewportHeight);
@@ -769,6 +780,7 @@ export default function OceanBackground() {
 	const fishCanvasRef = useRef(null);
 	const depthRef = useRef(0);
 	const scrollRef = useRef(0);
+	const scrollProgressRef = useRef(0);
 	const sharksVisibleRef = useRef(false);
 	const zoneOpacitiesRef = useRef(getZoneOpacities(0));
 	const backgroundRef = useRef(null);
@@ -792,6 +804,7 @@ export default function OceanBackground() {
 
 			setDepth(clamp(progress));
 			scrollRef.current = clampedScrollTop;
+			scrollProgressRef.current = progress;
 			if (backgroundRef.current) {
 				backgroundRef.current.style.setProperty("--ocean-scroll-y", `${clampedScrollTop}px`);
 				backgroundRef.current.style.setProperty("--ocean-scroll-progress", `${progress}`);
@@ -932,6 +945,7 @@ export default function OceanBackground() {
 			const zoneOpacityByZone = zoneOpacitiesRef.current;
 			const depthValue = depthRef.current;
 			const scrollValue = scrollRef.current;
+			const scrollProgressValue = scrollProgressRef.current;
 			const viewportHeight = getViewportSize().height;
 
 			for (let i = 0; i < fishFrame.length; i += 1) {
@@ -949,6 +963,7 @@ export default function OceanBackground() {
 					fish,
 					depthValue,
 					scrollValue,
+					scrollProgressValue,
 					viewportHeight
 				);
 				const renderY = wrapFishRenderY(fish.y + parallaxShift, viewportHeight);
@@ -1093,7 +1108,7 @@ export default function OceanBackground() {
 				renderSchoolFishCanvas(frame);
 				frame.forEach((fish) => {
 					if (fish.isSchoolFish) return;
-					renderFishNode(fish, laneRefs.current, depthRef, scrollRef);
+					renderFishNode(fish, laneRefs.current, depthRef, scrollRef, scrollProgressRef);
 				});
 				if (profiler.enabled) {
 					profiler.renderFrames += 1;
@@ -1267,13 +1282,13 @@ export default function OceanBackground() {
 					maxSpeed += panicLevel * 14;
 				}
 
-				applyRandomTurn(fish, dt, minSpeed, maxSpeed);
-				applyDepthSteering(fish, viewport.height, dt);
-				applyDrift(fish, dt);
-				clampSpeed(fish, minSpeed, maxSpeed);
-				advanceAndWrapPosition(fish, viewport, dt);
+					applyRandomTurn(fish, dt, minSpeed, maxSpeed);
+					applyDepthSteering(fish, viewport.height, dt);
+					applyDrift(fish, dt);
+					clampSpeed(fish, minSpeed, maxSpeed);
+					advanceAndWrapPosition(fish, viewport, dt);
 					if (!fish.isSchoolFish) {
-						renderFishNode(fish, laneRefs.current, depthRef, scrollRef);
+						renderFishNode(fish, laneRefs.current, depthRef, scrollRef, scrollProgressRef);
 					}
 			});
 			renderSchoolFishCanvas(fishState);
