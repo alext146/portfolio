@@ -604,6 +604,8 @@ export default function OceanBackground() {
   const seaweedSrc = useMemo(() => asset('assets/creatures/seaweed.svg'), [asset]);
 
   useEffect(() => {
+    if (creatures.length === 0) return undefined;
+
     const viewport = { width: window.innerWidth, height: window.innerHeight };
     const fishState = createFishState(creatures, viewport);
     const groups = groupFishByGroup(fishState);
@@ -613,7 +615,6 @@ export default function OceanBackground() {
     let rafId = 0;
     let lastTime = performance.now();
     let accumulatorMs = 0;
-
     const onResize = () => {
       viewport.width = window.innerWidth;
       viewport.height = window.innerHeight;
@@ -739,16 +740,16 @@ export default function OceanBackground() {
                     ? -1
                     : 1,
               '--creature-yaw': '0deg',
-            '--creature-turn-origin-x':
-              creature.species === 'angler'
-                ? '50%'
-                : creature.species === 'shark'
-                  ? creature.direction === 'left'
-                    ? TURN_ORIGIN_TIP_LEFT
-                    : TURN_ORIGIN_TIP_RIGHT
+              '--creature-turn-origin-x':
+                creature.species === 'angler'
+                  ? '50%'
+                  : creature.species === 'shark'
+                    ? creature.direction === 'left'
+                      ? TURN_ORIGIN_TIP_LEFT
+                      : TURN_ORIGIN_TIP_RIGHT
                 : creature.direction === 'left'
-                  ? TURN_ORIGIN_TIP_LEFT
-                  : TURN_ORIGIN_TIP_RIGHT,
+                    ? TURN_ORIGIN_TIP_LEFT
+                    : TURN_ORIGIN_TIP_RIGHT,
               zIndex: creature.layer,
               transform: 'translate3d(-220px, -220px, 0)'
             }}
