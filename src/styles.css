@@ -79,7 +79,6 @@ textarea {
 		calc((var(--ocean-parallax) * var(--ocean-parallax-shift, 0px)) + (var(--ocean-scroll-y, 0px) * var(--ocean-scroll-speed, 0))),
 		0
 	);
-	will-change: transform, opacity;
 }
 
 .ocean-gradient {
@@ -162,11 +161,11 @@ textarea {
 		radial-gradient(ellipse at 20% 36%, rgba(20, 14, 10, 0.5) 0%, transparent 48%),
 		radial-gradient(ellipse at 74% 42%, rgba(16, 11, 8, 0.44) 0%, transparent 44%),
 		repeating-linear-gradient(-8deg, rgba(116, 89, 54, 0.24) 0 16px, rgba(60, 44, 28, 0.22) 16px 30px),
-		linear-gradient(180deg, hsl(34 30% 20%) 0%, hsl(26 26% 13%) 58%, hsl(20 23% 9%) 100%);
+		linear-gradient(180deg, hsl(34 32% 24%) 0%, hsl(26 27% 17%) 58%, hsl(20 24% 12%) 100%);
 	box-shadow: 0 -22px 62px rgba(0, 0, 0, 0.42);
 	opacity: calc(var(--ocean-bottom) * 0.96);
 	transform: translateY(calc(20vh - var(--ocean-bottom) * 20vh + (var(--ocean-parallax) * 36px) - (var(--ocean-scroll-y, 0px) * 0.018)));
-	filter: brightness(calc(1.03 - var(--ocean-darkness, var(--ocean-depth)) * 0.28)) saturate(calc(1.02 - var(--ocean-darkness, var(--ocean-depth)) * 0.1));
+	filter: brightness(calc(1.1 - var(--ocean-darkness, var(--ocean-depth)) * 0.2)) saturate(calc(1.06 - var(--ocean-darkness, var(--ocean-depth)) * 0.08));
 	z-index: 1;
 	isolation: isolate;
 	transition:

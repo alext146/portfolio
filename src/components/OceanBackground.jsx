@@ -10,8 +10,14 @@ const THEME_META_SELECTOR = 'meta[name="theme-color"]';
 const TURN_ORIGIN_TIP_RIGHT = '92%';
 const TURN_ORIGIN_TIP_LEFT = '8%';
 const SHARK_ENTRY_DELAY_MS = 1800;
-const TARGET_FPS = 30;
-const FRAME_INTERVAL_MS = 1000 / TARGET_FPS;
+const DESKTOP_TARGET_FPS = 30;
+const HIGH_END_DESKTOP_TARGET_FPS = 45;
+const MOBILE_TARGET_FPS = 24;
+const LOW_POWER_TARGET_FPS = 20;
+const MIN_TARGET_FPS = 15;
+const MAX_TARGET_FPS = 60;
+const OCEAN_FPS_QUERY_PARAM = 'fps';
+const OCEAN_FPS_STORAGE_KEY = 'oceanFps';
 const OCEAN_PROFILE_QUERY_PARAM = 'profile';
 const OCEAN_PROFILE_STORAGE_KEY = 'oceanProfile';
 const PROFILE_LOG_INTERVAL_MS = 5000;
@@ -225,6 +231,53 @@ const isOceanProfilingEnabled = () => {
   } catch {
     return false;
   }
+};
+
+const getFrameIntervalMs = () => {
+  if (typeof window === 'undefined') return 1000 / DESKTOP_TARGET_FPS;
+
+  const params = new URLSearchParams(window.location.search);
+  const fpsFromQuery = Number.parseInt(params.get(OCEAN_FPS_QUERY_PARAM) || '', 10);
+  let fpsFromStorage = Number.NaN;
+  try {
+    fpsFromStorage = Number.parseInt(window.localStorage.getItem(OCEAN_FPS_STORAGE_KEY) || '', 10);
+  } catch {
+    fpsFromStorage = Number.NaN;
+  }
+
+  const overriddenFps = Number.isFinite(fpsFromQuery)
+    ? fpsFromQuery
+    : Number.isFinite(fpsFromStorage)
+      ? fpsFromStorage
+      : null;
+
+  const isSmallScreen = window.matchMedia('(max-width: 900px)').matches;
+  const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+  const hardwareThreads = navigator.hardwareConcurrency || 0;
+  const isLowPowerCpu = hardwareThreads > 0 && hardwareThreads <= 4;
+  const deviceMemory = navigator.deviceMemory || 0;
+  const isLowMemoryDevice = deviceMemory > 0 && deviceMemory <= 4;
+  const isHighEndDesktop =
+    !isSmallScreen &&
+    !isCoarsePointer &&
+    hardwareThreads >= 8 &&
+    (deviceMemory === 0 || deviceMemory >= 8);
+
+  const defaultFps = isLowPowerCpu
+    ? LOW_POWER_TARGET_FPS
+    : isLowMemoryDevice || isSmallScreen || isCoarsePointer
+      ? MOBILE_TARGET_FPS
+      : isHighEndDesktop
+        ? HIGH_END_DESKTOP_TARGET_FPS
+        : DESKTOP_TARGET_FPS;
+
+  const targetFps = clamp(
+    overriddenFps ?? defaultFps,
+    MIN_TARGET_FPS,
+    MAX_TARGET_FPS
+  );
+
+  return 1000 / targetFps;
 };
 
 const createSeaweedPatches = (count = SEAWEED_PATCH_COUNT) => {
@@ -650,6 +703,7 @@ export default function OceanBackground() {
 
   useEffect(() => {
     if (creatures.length === 0) return undefined;
+    let frameIntervalMs = getFrameIntervalMs();
 
     if (typeof Worker !== 'undefined') {
       const profilingEnabled = isOceanProfilingEnabled();
@@ -722,6 +776,7 @@ export default function OceanBackground() {
           frameCoalesceCount: profiler.framesCoalesced,
           renderFrameCount: profiler.renderFrames,
           avgRenderMs,
+          targetFps: Number((1000 / frameIntervalMs).toFixed(1)),
           laneNodeCount: laneRefs.current.size,
           domNodeCount: getDomNodeCount(),
           jsHeapUsedMB: profiler.jsHeap?.usedMB ?? null,
@@ -745,7 +800,7 @@ export default function OceanBackground() {
         if (destroyed || waitingForFrame || document.visibilityState !== 'visible') return;
         const now = performance.now();
         const elapsed = now - lastFrameRequestAt;
-        if (elapsed < FRAME_INTERVAL_MS) {
+        if (elapsed < frameIntervalMs) {
           throttleRafId = window.requestAnimationFrame(requestFrame);
           return;
         }
@@ -805,6 +860,7 @@ export default function OceanBackground() {
       });
 
       const onResize = () => {
+        frameIntervalMs = getFrameIntervalMs();
         worker.postMessage({
           type: 'resize',
           payload: {
@@ -888,6 +944,7 @@ export default function OceanBackground() {
     const onResize = () => {
       viewport.width = window.innerWidth;
       viewport.height = window.innerHeight;
+      frameIntervalMs = getFrameIntervalMs();
     };
 
     const tick = (now) => {
@@ -895,14 +952,14 @@ export default function OceanBackground() {
       lastTime = now;
       accumulatorMs += elapsedMs;
 
-      if (accumulatorMs < FRAME_INTERVAL_MS) {
+      if (accumulatorMs < frameIntervalMs) {
         rafId = window.requestAnimationFrame(tick);
         return;
       }
 
       const stepMs = Math.min(accumulatorMs, MAX_TICK_DT * 1000);
       const dt = stepMs / 1000;
-      accumulatorMs %= FRAME_INTERVAL_MS;
+      accumulatorMs %= frameIntervalMs;
 
       fishState.forEach((fish) => {
         if (fish.isShark && !sharksVisibleRef.current) return;
