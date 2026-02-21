@@ -13,10 +13,12 @@ const TURN_ORIGIN_TIP_LEFT = "8%";
 const SHARK_ENTRY_DELAY_MS = 1800;
 const DESKTOP_TARGET_FPS = 36;
 const HIGH_END_DESKTOP_TARGET_FPS = 60;
-const MOBILE_TARGET_FPS = 36;
-const LOW_POWER_TARGET_FPS = 30;
+const MOBILE_TARGET_FPS = 48;
+const LOW_POWER_TARGET_FPS = 36;
 const MIN_TARGET_FPS = 15;
 const MAX_TARGET_FPS = 60;
+const FISH_SCROLL_PARALLAX_BASE = 0.032;
+const FISH_SCROLL_PARALLAX_DEPTH_SCALE = 0.04;
 const DESKTOP_FISH_DENSITY = 1;
 const MOBILE_FISH_DENSITY = 0.72;
 const LOW_POWER_MOBILE_FISH_DENSITY = 0.62;
@@ -668,7 +670,9 @@ const renderFishNode = (fish, laneMap, depthRef, scrollRef) => {
 
 	const yaw = clamp((fish.vy / Math.max(Math.abs(fish.vx), 1)) * 12, -12, 12);
 	const depthParallaxShift = (depthRef.current - 0.5) * -(8 + fish.yUnit * 22);
-	const scrollParallaxShift = scrollRef.current * (0.02 + fish.yUnit * 0.026);
+	const scrollParallaxShift =
+		scrollRef.current *
+		(FISH_SCROLL_PARALLAX_BASE + fish.yUnit * FISH_SCROLL_PARALLAX_DEPTH_SCALE);
 	const parallaxShift = depthParallaxShift - scrollParallaxShift;
 	const facing = fish.vx < 0 ? -1 : 1;
 	const facingForSpecies = fish.isShark ? -facing : facing;
@@ -866,7 +870,9 @@ export default function OceanBackground() {
 
 				const yaw = clamp((fish.vy / Math.max(Math.abs(fish.vx), 1)) * 12, -12, 12);
 				const depthParallaxShift = (depthValue - 0.5) * -(8 + fish.yUnit * 22);
-				const scrollParallaxShift = scrollValue * (0.02 + fish.yUnit * 0.026);
+				const scrollParallaxShift =
+					scrollValue *
+					(FISH_SCROLL_PARALLAX_BASE + fish.yUnit * FISH_SCROLL_PARALLAX_DEPTH_SCALE);
 				const parallaxShift = depthParallaxShift - scrollParallaxShift;
 				const facing = fish.vx < 0 ? -1 : 1;
 				const yawForFacing = facing < 0 ? -yaw : yaw;
