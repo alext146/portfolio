@@ -1,0 +1,22 @@
+<svg width="260" height="160" viewBox="0 0 260 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="anglerBody" x1="32" y1="56" x2="214" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5f7481"/>
+      <stop offset="0.55" stop-color="#465c69"/>
+      <stop offset="1" stop-color="#2f4653"/>
+    </linearGradient>
+    <radialGradient id="lureGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(52 22) rotate(90) scale(8 8)">
+      <stop offset="0" stop-color="#f5e7a7" stop-opacity="0.78"/>
+      <stop offset="0.5" stop-color="#d9be6b" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#d9be6b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path d="M30 90C40 63 73 44 116 42C159 40 195 55 220 80C202 80 187 88 173 101C157 116 131 128 102 128C70 128 43 114 30 90Z" fill="url(#anglerBody)"/>
+  <path d="M30 90C16 84 9 74 6 61C20 67 31 73 42 81" fill="#415866"/>
+  <path d="M92 100C116 96 141 99 162 110C146 121 125 127 102 127C86 127 71 123 58 116C67 109 78 103 92 100Z" fill="#9baab3" fill-opacity="0.35"/>
+  <path d="M118 42C97 26 78 20 58 22" stroke="#6b8390" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="52" cy="22" r="2.6" fill="url(#lureGlow)"/>
+  <circle cx="132" cy="77" r="3.3" fill="#213540"/>
+  <path d="M146 89C156 91 165 95 172 101" stroke="#293f4c" stroke-width="2" stroke-linecap="round"/>
+  <path d="M84 93C98 90 114 90 130 94" stroke="#d9e2e7" stroke-opacity="0.28" stroke-width="1.9" stroke-linecap="round"/>
+</svg>

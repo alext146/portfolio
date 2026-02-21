@@ -1,0 +1,20 @@
+<svg width="260" height="180" viewBox="0 0 260 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mantaTop" x1="38" y1="54" x2="232" y2="126" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#667b86"/>
+      <stop offset="0.55" stop-color="#4b606c"/>
+      <stop offset="1" stop-color="#334853"/>
+    </linearGradient>
+    <linearGradient id="mantaBelly" x1="124" y1="78" x2="142" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c7d4da" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#7d909a" stop-opacity="0.25"/>
+    </linearGradient>
+  </defs>
+  <path d="M14 88C34 56 74 38 122 38C167 38 207 53 240 86C214 86 198 92 184 105C166 121 144 132 122 132C98 132 73 120 55 103C42 91 28 86 14 88Z" fill="url(#mantaTop)"/>
+  <path d="M96 72C108 84 132 84 145 72C146 91 144 111 132 126H108C97 111 94 92 96 72Z" fill="url(#mantaBelly)"/>
+  <path d="M98 52C93 44 90 36 92 30C102 34 109 41 112 49" fill="#465c67"/>
+  <path d="M148 52C153 44 156 36 154 30C144 34 137 41 134 49" fill="#465c67"/>
+  <path d="M122 125C116 143 106 154 98 165" stroke="#4f6773" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="109" cy="67" r="2.2" fill="#273a44"/>
+  <circle cx="136" cy="67" r="2.2" fill="#273a44"/>
+</svg>

@@ -1,0 +1,22 @@
+<svg width="240" height="120" viewBox="0 0 240 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dolphinBody" x1="26" y1="46" x2="212" y2="98" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8fb4c2"/>
+      <stop offset="0.55" stop-color="#62889a"/>
+      <stop offset="1" stop-color="#3d6173"/>
+    </linearGradient>
+    <linearGradient id="dolphinBelly" x1="84" y1="72" x2="194" y2="98" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d6e2e8" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#9cb3bf" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 74C30 53 65 36 110 34C149 33 186 44 212 61C222 67 228 73 230 79C218 80 208 85 198 93C185 102 165 109 136 112C97 116 60 110 36 97C24 90 18 82 16 74Z" fill="url(#dolphinBody)"/>
+  <path d="M84 75C116 70 154 73 188 89C168 100 145 106 120 108C97 110 76 107 58 99C66 89 74 81 84 75Z" fill="url(#dolphinBelly)"/>
+  <path d="M103 36C98 22 104 12 116 8C128 15 133 28 130 40" fill="#4e7486"/>
+  <path d="M32 71C20 64 10 52 8 40C20 47 32 56 40 67" fill="#4e7486"/>
+  <path d="M194 92C205 100 219 106 232 107C223 99 215 89 208 81" fill="#4a6f82"/>
+  <path d="M188 88C198 96 209 102 219 104C214 95 207 86 199 80" fill="#5b8193"/>
+  <path d="M132 82C143 82 151 79 158 74" stroke="#d4e4ec" stroke-opacity="0.45" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="165" cy="66" r="2.8" fill="#233847"/>
+  <circle cx="166" cy="65" r="0.9" fill="#d9e7f0"/>
+</svg>
