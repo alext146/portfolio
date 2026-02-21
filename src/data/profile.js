@@ -79,7 +79,7 @@ export const projects = [
   {
     title: 'Language Learners (Research Project)',
     description:
-      'Single private research project delivered in three language variants (French, Spanish, Polish) covering conversational practice, drills, and review flows.',
+      'A controlled research project evaluating conversational practice, drill structures, and review workflows, implemented across a limited set of language variants to isolate variables and maintain methodological integrity.',
     stack: 'React Native, Expo',
     link: null,
     image: null
