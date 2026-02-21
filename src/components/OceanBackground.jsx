@@ -538,6 +538,7 @@ export default function OceanBackground() {
   const scrollRef = useRef(0);
   const sharksVisibleRef = useRef(false);
   const backgroundRef = useRef(null);
+  const simulationWorkerRef = useRef(null);
 
   const asset = useMemo(() => createAssetResolver(import.meta.env.BASE_URL), []);
 
@@ -591,6 +592,12 @@ export default function OceanBackground() {
 
   useEffect(() => {
     sharksVisibleRef.current = sharksVisible;
+    if (simulationWorkerRef.current) {
+      simulationWorkerRef.current.postMessage({
+        type: 'set-sharks-visible',
+        payload: { visible: sharksVisible }
+      });
+    }
   }, [sharksVisible]);
 
   useEffect(() => {
@@ -605,6 +612,71 @@ export default function OceanBackground() {
 
   useEffect(() => {
     if (creatures.length === 0) return undefined;
+
+    if (typeof Worker !== 'undefined') {
+      const worker = new Worker(new URL('../workers/fishSimulation.worker.js', import.meta.url), {
+        type: 'module'
+      });
+      simulationWorkerRef.current = worker;
+      let frame = null;
+      let renderQueued = false;
+      let renderRafId = 0;
+      let destroyed = false;
+
+      const flushFrame = () => {
+        renderQueued = false;
+        if (!frame) return;
+
+        frame.forEach((fish) => {
+          renderFishNode(fish, laneRefs.current, depthRef, scrollRef);
+        });
+      };
+
+      worker.onmessage = (event) => {
+        if (destroyed) return;
+        if (event.data?.type !== 'frame' || !Array.isArray(event.data.fish)) return;
+
+        frame = event.data.fish;
+        if (renderQueued) return;
+        renderQueued = true;
+        renderRafId = window.requestAnimationFrame(flushFrame);
+      };
+
+      worker.postMessage({
+        type: 'init',
+        payload: {
+          creatures,
+          viewport: {
+            width: window.innerWidth,
+            height: window.innerHeight
+          },
+          sharksVisible: sharksVisibleRef.current
+        }
+      });
+
+      const onResize = () => {
+        worker.postMessage({
+          type: 'resize',
+          payload: {
+            viewport: {
+              width: window.innerWidth,
+              height: window.innerHeight
+            }
+          }
+        });
+      };
+
+      window.addEventListener('resize', onResize);
+
+      return () => {
+        destroyed = true;
+        window.removeEventListener('resize', onResize);
+        window.cancelAnimationFrame(renderRafId);
+        worker.postMessage({ type: 'stop' });
+        worker.terminate();
+        simulationWorkerRef.current = null;
+      };
+    }
 
     const viewport = { width: window.innerWidth, height: window.innerHeight };
     const fishState = createFishState(creatures, viewport);
