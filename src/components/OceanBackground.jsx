@@ -12,10 +12,13 @@ const TURN_ORIGIN_TIP_LEFT = '8%';
 const SHARK_ENTRY_DELAY_MS = 1800;
 const DESKTOP_TARGET_FPS = 30;
 const HIGH_END_DESKTOP_TARGET_FPS = 45;
-const MOBILE_TARGET_FPS = 24;
-const LOW_POWER_TARGET_FPS = 20;
+const MOBILE_TARGET_FPS = 30;
+const LOW_POWER_TARGET_FPS = 24;
 const MIN_TARGET_FPS = 15;
 const MAX_TARGET_FPS = 60;
+const DESKTOP_FISH_DENSITY = 1;
+const MOBILE_FISH_DENSITY = 0.72;
+const LOW_POWER_MOBILE_FISH_DENSITY = 0.62;
 const OCEAN_FPS_QUERY_PARAM = 'fps';
 const OCEAN_FPS_STORAGE_KEY = 'oceanFps';
 const OCEAN_PROFILE_QUERY_PARAM = 'profile';
@@ -280,6 +283,21 @@ const getFrameIntervalMs = () => {
   return 1000 / targetFps;
 };
 
+const getFishDensity = () => {
+  if (typeof window === 'undefined') return DESKTOP_FISH_DENSITY;
+
+  const isSmallScreen = window.matchMedia('(max-width: 900px)').matches;
+  const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+  const hardwareThreads = navigator.hardwareConcurrency || 0;
+  const isLowPowerCpu = hardwareThreads > 0 && hardwareThreads <= 4;
+  const deviceMemory = navigator.deviceMemory || 0;
+  const isLowMemoryDevice = deviceMemory > 0 && deviceMemory <= 4;
+
+  if (isLowPowerCpu || isLowMemoryDevice) return LOW_POWER_MOBILE_FISH_DENSITY;
+  if (isSmallScreen || isCoarsePointer) return MOBILE_FISH_DENSITY;
+  return DESKTOP_FISH_DENSITY;
+};
+
 const createSeaweedPatches = (count = SEAWEED_PATCH_COUNT) => {
   const rng = seededRng(hashString('seaweed-patches-v1'));
   const patches = [];
@@ -321,11 +339,12 @@ const createSeaweedPatches = (count = SEAWEED_PATCH_COUNT) => {
     .map(({ leftValue, ...patch }) => patch);
 };
 
-const buildSchoolCreatures = () => {
+const buildSchoolCreatures = (density = DESKTOP_FISH_DENSITY) => {
   return SCHOOL_BLUEPRINTS.flatMap((school) => {
     const rng = seededRng(hashString(`school-${school.id}`));
+    const count = Math.max(1, Math.round(school.count * density));
 
-    return Array.from({ length: school.count }, (_, index) => {
+    return Array.from({ length: count }, (_, index) => {
       const yOffset = (rng() - 0.5) * 5;
       const sizeJitter = (rng() - 0.5) * 5;
       const yUnit = clamp((school.y + yOffset) / 100, 0.05, 0.95);
@@ -355,7 +374,10 @@ const buildFeatureCreatures = (asset) => {
   }));
 };
 
-const buildCreatures = (asset) => [...buildSchoolCreatures(), ...buildFeatureCreatures(asset)];
+const buildCreatures = (asset, density) => [
+  ...buildSchoolCreatures(density),
+  ...buildFeatureCreatures(asset)
+];
 
 const createFishState = (creatures, viewport) => {
   return creatures.map((creature) => {
@@ -698,7 +720,8 @@ export default function OceanBackground() {
   }, [depth]);
 
   const seaweedPatches = useMemo(() => createSeaweedPatches(SEAWEED_PATCH_COUNT), []);
-  const creatures = useMemo(() => buildCreatures(asset), [asset]);
+  const fishDensity = useMemo(() => getFishDensity(), []);
+  const creatures = useMemo(() => buildCreatures(asset, fishDensity), [asset, fishDensity]);
   const seaweedSrc = useMemo(() => asset('assets/creatures/seaweed.svg'), [asset]);
 
   useEffect(() => {
