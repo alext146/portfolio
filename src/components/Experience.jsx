@@ -17,7 +17,7 @@ export default function Experience() {
                     <h3>{item.title}</h3>
                     <span className="muted">{item.org}</span>
                   </div>
-                  <span className="tag">{item.dates}</span>
+                  <span className="tag experience__date">{item.dates}</span>
                 </div>
                 <ul>
                   {item.bullets.map((bullet) => (
