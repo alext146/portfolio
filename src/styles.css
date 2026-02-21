@@ -1155,10 +1155,6 @@ textarea {
 	.ocean-creature-wrapper {
 		width: calc(var(--creature-size) * 0.78);
 	}
-	.ocean-seaweed,
-	.ocean-creature-wrapper {
-		animation: none;
-	}
 	.nav__inner {
 		grid-template-columns: minmax(0, 1fr) auto;
 		align-items: center;
