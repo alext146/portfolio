@@ -76,7 +76,10 @@ textarea {
 	bottom: -34px;
 	transform: translate3d(
 		0,
-		calc((var(--ocean-parallax) * var(--ocean-parallax-shift, 0px)) + (var(--ocean-scroll-y, 0px) * var(--ocean-scroll-speed, 0))),
+		calc(
+			(var(--ocean-parallax) * var(--ocean-parallax-shift, 0px) * var(--ocean-parallax-factor, 1)) +
+				(var(--ocean-scroll-y, 0px) * var(--ocean-scroll-speed, 0) * var(--ocean-scroll-factor, 1))
+		),
 		0
 	);
 }
@@ -1114,12 +1117,19 @@ textarea {
 	.ocean-depth-haze,
 	.ocean-depth-dim,
 	.ocean-foreground-haze {
-		--ocean-scroll-speed: 0;
+		--ocean-scroll-factor: 0.42;
+		--ocean-parallax-factor: 0.62;
 	}
 	.ocean-seafloor {
 		bottom: -24vh;
 		height: 42vh;
-		transform: translateY(calc(20vh - var(--ocean-bottom) * 20vh));
+		transform: translateY(
+			calc(
+				20vh - var(--ocean-bottom) * 20vh +
+					(var(--ocean-parallax) * 18px) -
+					(var(--ocean-scroll-y, 0px) * 0.008)
+			)
+		);
 	}
 	.ocean-seaweed {
 		width: calc(var(--seaweed-size) * 0.82);
