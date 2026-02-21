@@ -1,0 +1,21 @@
+<svg width="360" height="170" viewBox="0 0 360 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="whaleTop" x1="22" y1="64" x2="304" y2="126" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6e8390"/>
+      <stop offset="0.55" stop-color="#506775"/>
+      <stop offset="1" stop-color="#374e5b"/>
+    </linearGradient>
+    <linearGradient id="whaleBelly" x1="104" y1="92" x2="246" y2="125" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#cad6dc" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#8ea0aa" stop-opacity="0.24"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 94C35 68 77 50 133 46C191 42 252 54 302 82C287 84 274 90 262 101C244 117 219 129 190 136C158 143 122 145 90 139C59 133 33 119 18 94Z" fill="url(#whaleTop)"/>
+  <path d="M104 90C136 83 178 86 220 106C196 120 167 128 134 130C106 132 82 128 62 117C74 106 88 97 104 90Z" fill="url(#whaleBelly)"/>
+  <path d="M111 48C105 35 110 23 122 17C136 23 142 35 139 47" fill="#435a67"/>
+  <path d="M305 82C326 73 344 59 354 42C339 48 323 56 307 66" fill="#4b6270"/>
+  <path d="M305 82C326 91 344 106 354 124C339 119 323 111 307 101" fill="#4b6270"/>
+  <circle cx="202" cy="79" r="2.6" fill="#263944"/>
+  <path d="M146 101C162 97 178 97 195 102" stroke="#d4e0e6" stroke-opacity="0.34" stroke-width="2" stroke-linecap="round"/>
+  <path d="M95 108C106 111 116 114 126 119" stroke="#2f4754" stroke-opacity="0.54" stroke-width="2" stroke-linecap="round"/>
+</svg>

@@ -31,9 +31,9 @@ export default function Contact() {
   return (
     <section id="contact" className="section section--alt">
       <div className="container">
-        <div className="section__header">
+        <div className="section__header section__header--contact">
           <h2>Contact</h2>
-          <p>Let’s connect—new projects, collaborations, or just a quick hello.</p>
+          <p>Let's connect - new projects, collaborations, or just a quick hello.</p>
         </div>
         <div className="contact">
           <form className="contact__form" onSubmit={handleSubmit}>
