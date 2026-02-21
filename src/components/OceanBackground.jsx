@@ -10,6 +10,8 @@ const THEME_META_SELECTOR = 'meta[name="theme-color"]';
 const TURN_ORIGIN_TIP_RIGHT = '92%';
 const TURN_ORIGIN_TIP_LEFT = '8%';
 const SHARK_ENTRY_DELAY_MS = 1800;
+const TARGET_FPS = 30;
+const FRAME_INTERVAL_MS = 1000 / TARGET_FPS;
 
 const FISH_COLORS_BY_ZONE = {
   sunlight: '#214e66',
@@ -610,6 +612,7 @@ export default function OceanBackground() {
 
     let rafId = 0;
     let lastTime = performance.now();
+    let accumulatorMs = 0;
 
     const onResize = () => {
       viewport.width = window.innerWidth;
@@ -617,8 +620,18 @@ export default function OceanBackground() {
     };
 
     const tick = (now) => {
-      const dt = Math.min((now - lastTime) / 1000, MAX_TICK_DT);
+      const elapsedMs = now - lastTime;
       lastTime = now;
+      accumulatorMs += elapsedMs;
+
+      if (accumulatorMs < FRAME_INTERVAL_MS) {
+        rafId = window.requestAnimationFrame(tick);
+        return;
+      }
+
+      const stepMs = Math.min(accumulatorMs, MAX_TICK_DT * 1000);
+      const dt = stepMs / 1000;
+      accumulatorMs %= FRAME_INTERVAL_MS;
 
       fishState.forEach((fish) => {
         if (fish.isShark && !sharksVisibleRef.current) return;
