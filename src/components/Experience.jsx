@@ -6,7 +6,7 @@ export default function Experience() {
       <div className="container">
         <div className="section__header">
           <h2>Research & Leadership</h2>
-          <p>Applied research and delivery leadership in security-focused mobile systems.</p>
+          <p>Delivery leadership and applied research in autonomous, reliability-critical systems.</p>
         </div>
         <div className="experience">
           {experience.map((item) => (

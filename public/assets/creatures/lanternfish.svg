@@ -1,0 +1,23 @@
+<svg width="220" height="120" viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lanternBody" x1="26" y1="48" x2="176" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#617b8a"/>
+      <stop offset="0.6" stop-color="#465f6d"/>
+      <stop offset="1" stop-color="#2f4552"/>
+    </linearGradient>
+    <radialGradient id="lanternGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(80 9) rotate(90) scale(12 12)">
+      <stop offset="0" stop-color="#f6f1c2" stop-opacity="0.95"/>
+      <stop offset="0.45" stop-color="#d8cd92" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#d8cd92" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path d="M24 61C37 45 64 35 95 35C124 35 151 46 177 65C159 66 144 73 133 83C117 97 95 104 71 102C49 100 34 89 24 61Z" fill="url(#lanternBody)"/>
+  <path d="M24 61C14 57 8 49 6 39C15 43 24 50 32 55" fill="#3a5260"/>
+  <path d="M95 35C84 23 78 13 79 7C91 10 101 18 108 29" stroke="#6f8998" stroke-width="3.8" stroke-linecap="round"/>
+  <circle cx="80" cy="9" r="5.2" fill="url(#lanternGlow)"/>
+  <circle cx="112" cy="58" r="2.6" fill="#1f313d"/>
+  <circle cx="120" cy="74" r="2.3" fill="#e8dfa8" fill-opacity="0.68"/>
+  <circle cx="109" cy="78" r="2.2" fill="#e8dfa8" fill-opacity="0.62"/>
+  <circle cx="98" cy="80" r="2.1" fill="#e8dfa8" fill-opacity="0.58"/>
+  <circle cx="87" cy="80" r="2" fill="#e8dfa8" fill-opacity="0.54"/>
+</svg>

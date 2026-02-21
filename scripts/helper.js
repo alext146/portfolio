@@ -257,7 +257,7 @@ function about(){
                     <img id="myThumb" class="img-thumbnail w-50" src="./assets/100_0541.JPG" alt="Portrait thumbnail">
                     <div class="d-flex justify-content-center gap-4 m-4">
                         <a href="https://www.linkedin.com/in/alext146/" class="text-white" target="_blank" rel="noopener"> <i class="bi bi-linkedin"></i> </a>
-                        <a href="https://github.com/adtrahan146" class="text-white" target="_blank" rel="noopener"> <i class="bi bi-github"></i> </a>
+                        <a href="https://github.com/alext146" class="text-white" target="_blank" rel="noopener"> <i class="bi bi-github"></i> </a>
                     </div>
                     
                     <div class="d-flex row row-cols-1 d-md-block d-none">
@@ -376,7 +376,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer opaque-regular">
                                 <small class="text-muted"> HTML, CSS </small>
-                                <a href="https://github.com/adtrahan146/war-emp" target="_blank" rel="noopener">
+                                <a href="https://github.com/alext146/war-emp" target="_blank" rel="noopener">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
@@ -400,7 +400,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer">
                                 <small class="text-muted"> JavaScript </small>
-                                <a href="https://github.com/adtrahan146/EndGameMaps" target="_blank" rel="noopener">
+                                <a href="https://github.com/alext146/EndGameMaps" target="_blank" rel="noopener">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
@@ -424,7 +424,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer opaque-regular">
                                 <small class="text-muted"> JavaScript </small>
-                                <a href="https://github.com/adtrahan146/RockPaperScissors" target="_blank" rel="noopener">
+                                <a href="https://github.com/alext146/RockPaperScissors" target="_blank" rel="noopener">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
@@ -448,7 +448,7 @@ function code(){
                             <!--Card footer-->
                             <div class="card-footer">
                                 <small class="text-muted"> JavaScript </small>
-                                <a href="https://github.com/adtrahan146/the-peoples-insight" target="_blank" rel="noopener">
+                                <a href="https://github.com/alext146/the-peoples-insight" target="_blank" rel="noopener">
                                     <button class="btn btn-secondary float-end"> See More </button>
                                 </a>
                             </div>
