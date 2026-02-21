@@ -281,6 +281,17 @@ const getFishParallaxShift = (fish, scrollValue, viewportHeight) => {
 	return clamp(scrollParallaxShift, -FISH_SCROLL_PARALLAX_MAX_SHIFT, FISH_SCROLL_PARALLAX_MAX_SHIFT);
 };
 
+const wrapFishRenderY = (y, viewportHeight) => {
+	const minY = -WRAP_MARGIN;
+	const maxY = viewportHeight + WRAP_MARGIN;
+	const span = maxY - minY;
+	if (!Number.isFinite(span) || span <= 0) return y;
+
+	let wrapped = (y - minY) % span;
+	if (wrapped < 0) wrapped += span;
+	return wrapped + minY;
+};
+
 const bytesToMB = (bytes) => {
 	if (!Number.isFinite(bytes)) return null;
 	return Number((bytes / (1024 * 1024)).toFixed(2));
@@ -689,6 +700,7 @@ const renderFishNode = (fish, laneMap, scrollRef) => {
 	const yaw = clamp((fish.vy / Math.max(Math.abs(fish.vx), 1)) * 12, -12, 12);
 	const viewportHeight = typeof window !== "undefined" ? Math.max(window.innerHeight || 1, 1) : 1;
 	const parallaxShift = getFishParallaxShift(fish, scrollRef.current, viewportHeight);
+	const renderY = wrapFishRenderY(fish.y + parallaxShift, viewportHeight);
 	const facing = fish.vx < 0 ? -1 : 1;
 	const facingForSpecies = fish.isShark ? -facing : facing;
 	const baseYawForFacing = facingForSpecies < 0 ? -yaw : yaw;
@@ -696,7 +708,7 @@ const renderFishNode = (fish, laneMap, scrollRef) => {
 	const noseDirection = fish.isShark ? facing : facingForSpecies;
 	const turnOriginX = fish.isSchoolFish || fish.isShark ? (noseDirection < 0 ? TURN_ORIGIN_TIP_LEFT : TURN_ORIGIN_TIP_RIGHT) : "50%";
 
-	node.style.transform = `translate3d(${fish.x}px, ${fish.y + parallaxShift}px, 0)`;
+	node.style.transform = `translate3d(${fish.x}px, ${renderY}px, 0)`;
 	node.style.setProperty("--creature-facing", String(facingForSpecies));
 	node.style.setProperty("--creature-yaw", `${yawForSpecies}deg`);
 	node.style.setProperty("--creature-turn-origin-x", turnOriginX);
@@ -885,12 +897,13 @@ export default function OceanBackground() {
 
 				const yaw = clamp((fish.vy / Math.max(Math.abs(fish.vx), 1)) * 12, -12, 12);
 				const parallaxShift = getFishParallaxShift(fish, scrollValue, viewportHeight);
+				const renderY = wrapFishRenderY(fish.y + parallaxShift, viewportHeight);
 				const facing = fish.vx < 0 ? -1 : 1;
 				const yawForFacing = facing < 0 ? -yaw : yaw;
 				const fishScale = (metadata.size / 24) * canvasDpr;
 
 				canvasCtx.save();
-				canvasCtx.translate(fish.x * canvasDpr, (fish.y + parallaxShift) * canvasDpr);
+				canvasCtx.translate(fish.x * canvasDpr, renderY * canvasDpr);
 				canvasCtx.rotate(yawForFacing * DEG_TO_RAD);
 				canvasCtx.scale(facing * fishScale, fishScale);
 				canvasCtx.translate(-12, -12);
