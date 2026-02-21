@@ -45,68 +45,68 @@ export default function OceanBackground() {
       {
         src: '/assets/creatures/surface-dolphin.svg',
         alt: '',
-        start: 0.05,
-        end: 0.35,
-        size: 180,
-        x: '8%',
-        y: '18%',
-        duration: 16,
-        delay: -4
+        start: 0.02,
+        end: 0.28,
+        size: 160,
+        x: '10%',
+        y: '10%',
+        duration: 14,
+        delay: -3
       },
       {
         src: '/assets/creatures/sea-turtle.svg',
         alt: '',
-        start: 0.1,
-        end: 0.45,
-        size: 160,
-        x: '70%',
-        y: '22%',
-        duration: 18,
-        delay: -8
+        start: 0.08,
+        end: 0.32,
+        size: 140,
+        x: '68%',
+        y: '16%',
+        duration: 16,
+        delay: -6
       },
       {
         src: '/assets/creatures/manta-ray.svg',
         alt: '',
-        start: 0.25,
-        end: 0.7,
-        size: 220,
+        start: 0.22,
+        end: 0.6,
+        size: 200,
         x: '18%',
-        y: '46%',
-        duration: 20,
-        delay: -6
+        y: '48%',
+        duration: 18,
+        delay: -5
       },
       {
         src: '/assets/creatures/jellyfish.svg',
         alt: '',
         start: 0.35,
-        end: 0.75,
-        size: 170,
-        x: '68%',
-        y: '42%',
-        duration: 14,
+        end: 0.72,
+        size: 150,
+        x: '70%',
+        y: '46%',
+        duration: 13,
         delay: -2
       },
       {
         src: '/assets/creatures/anglerfish.svg',
         alt: '',
-        start: 0.65,
+        start: 0.62,
         end: 1,
-        size: 200,
-        x: '12%',
-        y: '70%',
-        duration: 22,
-        delay: -10
+        size: 180,
+        x: '14%',
+        y: '80%',
+        duration: 20,
+        delay: -9
       },
       {
         src: '/assets/creatures/squid.svg',
         alt: '',
-        start: 0.75,
+        start: 0.7,
         end: 1,
-        size: 210,
+        size: 190,
         x: '72%',
-        y: '74%',
-        duration: 24,
-        delay: -12
+        y: '82%',
+        duration: 22,
+        delay: -11
       }
     ],
     []
@@ -117,6 +117,7 @@ export default function OceanBackground() {
       <div className="ocean-gradient" />
       <div className="ocean-light" />
       <div className="ocean-bubbles" />
+      <div className="ocean-depth-haze" />
       {creatures.map((creature) => {
         const opacity = getOpacity(depth, creature.start, creature.end);
         const t = clamp((depth - creature.start) / (creature.end - creature.start));

@@ -36,9 +36,10 @@ body {
   inset: 0;
   background: linear-gradient(
     180deg,
-    hsl(195 80% calc(32% - (var(--ocean-depth) * 12%))) 0%,
-    hsl(205 85% calc(20% - (var(--ocean-depth) * 8%))) 45%,
-    hsl(220 70% calc(8% - (var(--ocean-depth) * 4%))) 100%
+    hsl(190 85% calc(45% - (var(--ocean-depth) * 30%))) 0%,
+    hsl(202 90% calc(32% - (var(--ocean-depth) * 22%))) 35%,
+    hsl(214 80% calc(18% - (var(--ocean-depth) * 14%))) 65%,
+    hsl(224 70% calc(8% - (var(--ocean-depth) * 6%))) 100%
   );
   transition: background 0.2s ease;
 }
@@ -66,7 +67,20 @@ body {
     radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
   background-size: 120px 120px, 180px 180px, 220px 220px;
   background-position: 20px 10px, 80px 40px, 140px 90px;
-  opacity: calc(0.25 - var(--ocean-depth) * 0.15);
+  opacity: calc(0.28 - var(--ocean-depth) * 0.2);
+}
+
+.ocean-depth-haze {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 12, 24, 0.35) 55%,
+    rgba(0, 5, 10, 0.7) 100%
+  );
+  opacity: calc(0.15 + var(--ocean-depth) * 0.65);
+  transition: opacity 0.2s ease;
 }
 
 .ocean-creature-wrapper {
