@@ -37,9 +37,9 @@ body {
   background: linear-gradient(
     180deg,
     hsl(190 85% calc(45% - (var(--ocean-depth) * 30%))) 0%,
-    hsl(202 90% calc(32% - (var(--ocean-depth) * 22%))) 35%,
-    hsl(214 80% calc(18% - (var(--ocean-depth) * 14%))) 65%,
-    hsl(224 70% calc(8% - (var(--ocean-depth) * 6%))) 100%
+    hsl(202 90% calc(30% - (var(--ocean-depth) * 24%))) 35%,
+    hsl(214 80% calc(16% - (var(--ocean-depth) * 16%))) 65%,
+    hsl(228 75% calc(4% - (var(--ocean-depth) * 8%))) 100%
   );
   transition: background 0.2s ease;
 }
@@ -76,10 +76,10 @@ body {
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 12, 24, 0.35) 55%,
-    rgba(0, 5, 10, 0.7) 100%
+    rgba(0, 8, 18, 0.45) 55%,
+    rgba(0, 2, 6, 0.85) 100%
   );
-  opacity: calc(0.15 + var(--ocean-depth) * 0.65);
+  opacity: calc(0.2 + var(--ocean-depth) * 0.75);
   transition: opacity 0.2s ease;
 }
 
