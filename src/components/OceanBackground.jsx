@@ -532,16 +532,59 @@ const getImageClassName = (creature) => {
 
 export default function OceanBackground() {
   const [depth, setDepth] = useState(0);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth <= 900 : false
+  );
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  });
   const [sharksVisible, setSharksVisible] = useState(false);
   const laneRefs = useRef(new Map());
   const depthRef = useRef(0);
   const scrollRef = useRef(0);
   const sharksVisibleRef = useRef(false);
   const backgroundRef = useRef(null);
+  const reduceMotion = isMobile || prefersReducedMotion;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const media = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    const handleMedia = () => setPrefersReducedMotion(Boolean(media?.matches));
+    const handleResize = () => setIsMobile(window.innerWidth <= 900);
+
+    handleMedia();
+    handleResize();
+
+    if (media?.addEventListener) {
+      media.addEventListener('change', handleMedia);
+    } else if (media?.addListener) {
+      media.addListener(handleMedia);
+    }
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      if (media?.removeEventListener) {
+        media.removeEventListener('change', handleMedia);
+      } else if (media?.removeListener) {
+        media.removeListener(handleMedia);
+      }
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const asset = useMemo(() => createAssetResolver(import.meta.env.BASE_URL), []);
 
   useEffect(() => {
+    if (reduceMotion) {
+      setDepth(0);
+      scrollRef.current = 0;
+      if (backgroundRef.current) {
+        backgroundRef.current.style.setProperty('--ocean-scroll-y', '0px');
+      }
+      return undefined;
+    }
+
     let ticking = false;
 
     const updateDepth = () => {
@@ -573,7 +616,7 @@ export default function OceanBackground() {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, []);
+  }, [reduceMotion]);
 
   useEffect(() => {
     depthRef.current = depth;
@@ -599,11 +642,19 @@ export default function OceanBackground() {
     themeColorMeta.setAttribute('content', getThemeColor(depth));
   }, [depth]);
 
-  const seaweedPatches = useMemo(() => createSeaweedPatches(SEAWEED_PATCH_COUNT), []);
-  const creatures = useMemo(() => buildCreatures(asset), [asset]);
+  const seaweedPatches = useMemo(
+    () => createSeaweedPatches(reduceMotion ? 3 : SEAWEED_PATCH_COUNT),
+    [reduceMotion]
+  );
+  const creatures = useMemo(
+    () => (reduceMotion ? [] : buildCreatures(asset)),
+    [asset, reduceMotion]
+  );
   const seaweedSrc = useMemo(() => asset('assets/creatures/seaweed.svg'), [asset]);
 
   useEffect(() => {
+    if (creatures.length === 0) return undefined;
+
     const viewport = { width: window.innerWidth, height: window.innerHeight };
     const fishState = createFishState(creatures, viewport);
     const groups = groupFishByGroup(fishState);
