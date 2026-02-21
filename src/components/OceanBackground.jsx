@@ -12,6 +12,12 @@ const TURN_ORIGIN_TIP_LEFT = '8%';
 const SHARK_ENTRY_DELAY_MS = 1800;
 const TARGET_FPS = 30;
 const FRAME_INTERVAL_MS = 1000 / TARGET_FPS;
+const OCEAN_PROFILE_QUERY_PARAM = 'profile';
+const OCEAN_PROFILE_STORAGE_KEY = 'oceanProfile';
+const PROFILE_LOG_INTERVAL_MS = 5000;
+const PROFILE_AGENT_MEMORY_SAMPLE_MS = 30000;
+
+let oceanWorkerCreateCount = 0;
 
 const FISH_COLORS_BY_ZONE = {
   sunlight: '#214e66',
@@ -189,6 +195,37 @@ const getThemeColor = (depth) => {
 };
 
 const createAssetResolver = (baseUrl) => (path) => `${baseUrl}${path.replace(/^\//, '')}`;
+
+const bytesToMB = (bytes) => {
+  if (!Number.isFinite(bytes)) return null;
+  return Number((bytes / (1024 * 1024)).toFixed(2));
+};
+
+const getJsHeapSnapshot = () => {
+  const memory = performance.memory;
+  if (!memory) return null;
+
+  return {
+    usedMB: bytesToMB(memory.usedJSHeapSize),
+    totalMB: bytesToMB(memory.totalJSHeapSize),
+    limitMB: bytesToMB(memory.jsHeapSizeLimit)
+  };
+};
+
+const getDomNodeCount = () => document.getElementsByTagName('*').length;
+
+const isOceanProfilingEnabled = () => {
+  if (typeof window === 'undefined') return false;
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get(OCEAN_PROFILE_QUERY_PARAM) === '1') return true;
+
+  try {
+    return window.localStorage.getItem(OCEAN_PROFILE_STORAGE_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
 
 const createSeaweedPatches = (count = SEAWEED_PATCH_COUNT) => {
   const rng = seededRng(hashString('seaweed-patches-v1'));
@@ -539,6 +576,7 @@ export default function OceanBackground() {
   const sharksVisibleRef = useRef(false);
   const backgroundRef = useRef(null);
   const simulationWorkerRef = useRef(null);
+  const profilerRef = useRef(null);
 
   const asset = useMemo(() => createAssetResolver(import.meta.env.BASE_URL), []);
 
@@ -614,30 +652,141 @@ export default function OceanBackground() {
     if (creatures.length === 0) return undefined;
 
     if (typeof Worker !== 'undefined') {
+      const profilingEnabled = isOceanProfilingEnabled();
+      const profiler = {
+        enabled: profilingEnabled,
+        startedAt: performance.now(),
+        framesRequested: 0,
+        framesReceived: 0,
+        framesCoalesced: 0,
+        renderFrames: 0,
+        renderMsTotal: 0,
+        jsHeap: null,
+        agentMemoryMB: null,
+        agentMemoryError: null,
+        agentMemoryPending: false,
+        workerStats: null
+      };
+      profilerRef.current = profiler;
+
       const worker = new Worker(new URL('../workers/fishSimulation.worker.js', import.meta.url), {
         type: 'module'
       });
+      oceanWorkerCreateCount += 1;
       simulationWorkerRef.current = worker;
       let frame = null;
       let renderQueued = false;
       let renderRafId = 0;
+      let throttleRafId = 0;
+      let profilerLogIntervalId = 0;
+      let profilerStatsIntervalId = 0;
+      let profilerAgentMemoryIntervalId = 0;
       let destroyed = false;
+      let waitingForFrame = false;
+      let lastFrameRequestAt = 0;
+      let profileApi = null;
+
+      const sampleJsHeap = () => {
+        if (!profiler.enabled) return;
+        profiler.jsHeap = getJsHeapSnapshot();
+      };
+
+      const sampleAgentMemory = async () => {
+        if (!profiler.enabled) return;
+        if (profiler.agentMemoryPending || profiler.agentMemoryError) return;
+        if (typeof performance.measureUserAgentSpecificMemory !== 'function') return;
+
+        profiler.agentMemoryPending = true;
+        try {
+          const report = await performance.measureUserAgentSpecificMemory();
+          profiler.agentMemoryMB = bytesToMB(report?.bytes);
+        } catch (error) {
+          profiler.agentMemoryError = error instanceof Error ? error.message : String(error);
+        } finally {
+          profiler.agentMemoryPending = false;
+        }
+      };
+
+      const buildProfilerSnapshot = () => {
+        const uptimeSec = Number(((performance.now() - profiler.startedAt) / 1000).toFixed(1));
+        const avgRenderMs =
+          profiler.renderFrames > 0
+            ? Number((profiler.renderMsTotal / profiler.renderFrames).toFixed(3))
+            : 0;
+
+        return {
+          uptimeSec,
+          workerCreateCount: oceanWorkerCreateCount,
+          frameRequestCount: profiler.framesRequested,
+          frameReceiveCount: profiler.framesReceived,
+          frameCoalesceCount: profiler.framesCoalesced,
+          renderFrameCount: profiler.renderFrames,
+          avgRenderMs,
+          laneNodeCount: laneRefs.current.size,
+          domNodeCount: getDomNodeCount(),
+          jsHeapUsedMB: profiler.jsHeap?.usedMB ?? null,
+          jsHeapTotalMB: profiler.jsHeap?.totalMB ?? null,
+          jsHeapLimitMB: profiler.jsHeap?.limitMB ?? null,
+          agentMemoryMB: profiler.agentMemoryMB,
+          agentMemoryError: profiler.agentMemoryError,
+          workerStats: profiler.workerStats
+        };
+      };
+
+      const logProfilerSnapshot = (label) => {
+        if (!profiler.enabled) return null;
+        sampleJsHeap();
+        const snapshot = buildProfilerSnapshot();
+        console.info(`[OceanProfile:${label}]`, snapshot);
+        return snapshot;
+      };
+
+      const requestFrame = () => {
+        if (destroyed || waitingForFrame || document.visibilityState !== 'visible') return;
+        const now = performance.now();
+        const elapsed = now - lastFrameRequestAt;
+        if (elapsed < FRAME_INTERVAL_MS) {
+          throttleRafId = window.requestAnimationFrame(requestFrame);
+          return;
+        }
+
+        lastFrameRequestAt = now;
+        waitingForFrame = true;
+        if (profiler.enabled) profiler.framesRequested += 1;
+        worker.postMessage({ type: 'request-frame' });
+      };
 
       const flushFrame = () => {
         renderQueued = false;
         if (!frame) return;
+        const renderStart = performance.now();
 
         frame.forEach((fish) => {
           renderFishNode(fish, laneRefs.current, depthRef, scrollRef);
         });
+        if (profiler.enabled) {
+          profiler.renderFrames += 1;
+          profiler.renderMsTotal += performance.now() - renderStart;
+        }
+
+        requestFrame();
       };
 
       worker.onmessage = (event) => {
         if (destroyed) return;
+        if (event.data?.type === 'stats') {
+          if (profiler.enabled) profiler.workerStats = event.data.stats || null;
+          return;
+        }
         if (event.data?.type !== 'frame' || !Array.isArray(event.data.fish)) return;
 
+        waitingForFrame = false;
+        if (profiler.enabled) profiler.framesReceived += 1;
         frame = event.data.fish;
-        if (renderQueued) return;
+        if (renderQueued) {
+          if (profiler.enabled) profiler.framesCoalesced += 1;
+          return;
+        }
         renderQueued = true;
         renderRafId = window.requestAnimationFrame(flushFrame);
       };
@@ -650,7 +799,8 @@ export default function OceanBackground() {
             width: window.innerWidth,
             height: window.innerHeight
           },
-          sharksVisible: sharksVisibleRef.current
+          sharksVisible: sharksVisibleRef.current,
+          active: document.visibilityState === 'visible'
         }
       });
 
@@ -665,16 +815,64 @@ export default function OceanBackground() {
           }
         });
       };
+      const onVisibilityChange = () => {
+        const active = document.visibilityState === 'visible';
+        worker.postMessage({
+          type: 'set-active',
+          payload: { active }
+        });
+
+        if (active) {
+          requestFrame();
+        } else {
+          waitingForFrame = false;
+        }
+      };
 
       window.addEventListener('resize', onResize);
+      document.addEventListener('visibilitychange', onVisibilityChange);
+      requestFrame();
+
+      if (profilingEnabled) {
+        const pollWorkerStats = () => {
+          worker.postMessage({ type: 'get-stats' });
+        };
+
+        profilerStatsIntervalId = window.setInterval(pollWorkerStats, PROFILE_LOG_INTERVAL_MS);
+        profilerLogIntervalId = window.setInterval(() => {
+          logProfilerSnapshot('interval');
+        }, PROFILE_LOG_INTERVAL_MS);
+        profilerAgentMemoryIntervalId = window.setInterval(() => {
+          void sampleAgentMemory();
+        }, PROFILE_AGENT_MEMORY_SAMPLE_MS);
+
+        pollWorkerStats();
+        void sampleAgentMemory();
+        logProfilerSnapshot('start');
+
+        profileApi = {
+          dump: () => logProfilerSnapshot('manual'),
+          get: () => buildProfilerSnapshot()
+        };
+        window.__oceanProfiler = profileApi;
+      }
 
       return () => {
         destroyed = true;
         window.removeEventListener('resize', onResize);
+        document.removeEventListener('visibilitychange', onVisibilityChange);
         window.cancelAnimationFrame(renderRafId);
+        window.cancelAnimationFrame(throttleRafId);
+        window.clearInterval(profilerLogIntervalId);
+        window.clearInterval(profilerStatsIntervalId);
+        window.clearInterval(profilerAgentMemoryIntervalId);
         worker.postMessage({ type: 'stop' });
         worker.terminate();
         simulationWorkerRef.current = null;
+        profilerRef.current = null;
+        if (profileApi && window.__oceanProfiler === profileApi) {
+          delete window.__oceanProfiler;
+        }
       };
     }
 

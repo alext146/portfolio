@@ -1,7 +1,5 @@
 const WRAP_MARGIN = 160;
 const MAX_TICK_DT = 0.05;
-const TARGET_FPS = 30;
-const FRAME_INTERVAL_MS = 1000 / TARGET_FPS;
 
 const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 
@@ -257,11 +255,43 @@ let groups = new Map();
 let anglers = [];
 let sharks = [];
 let sharksVisible = false;
-let timerId = null;
 let lastTime = 0;
-let accumulatorMs = 0;
+let isActive = true;
+const stats = {
+  startedAt: 0,
+  requestFrameMessages: 0,
+  framesPosted: 0,
+  ticks: 0,
+  simStepMsTotal: 0,
+  lastDtMs: 0
+};
+
+const resetStats = () => {
+  stats.startedAt = performance.now();
+  stats.requestFrameMessages = 0;
+  stats.framesPosted = 0;
+  stats.ticks = 0;
+  stats.simStepMsTotal = 0;
+  stats.lastDtMs = 0;
+};
+
+const snapshotStats = () => {
+  const uptimeMs = stats.startedAt > 0 ? performance.now() - stats.startedAt : 0;
+  return {
+    uptimeMs,
+    requestFrameMessages: stats.requestFrameMessages,
+    framesPosted: stats.framesPosted,
+    ticks: stats.ticks,
+    simStepMsTotal: stats.simStepMsTotal,
+    lastDtMs: stats.lastDtMs,
+    fishCount: fishState.length,
+    active: isActive,
+    sharksVisible
+  };
+};
 
 const postFrame = () => {
+  stats.framesPosted += 1;
   self.postMessage({
     type: 'frame',
     fish: fishState.map((fish) => ({
@@ -277,25 +307,12 @@ const postFrame = () => {
   });
 };
 
-const stopLoop = () => {
-  if (timerId === null) return;
-  self.clearInterval(timerId);
-  timerId = null;
-};
+const tick = (dt) => {
+  if (fishState.length === 0 || !isActive || dt <= 0) return;
+  stats.ticks += 1;
+  stats.simStepMsTotal += dt * 1000;
+  stats.lastDtMs = dt * 1000;
 
-const tick = () => {
-  if (fishState.length === 0) return;
-
-  const now = performance.now();
-  const elapsedMs = now - lastTime;
-  lastTime = now;
-  accumulatorMs += elapsedMs;
-
-  if (accumulatorMs < FRAME_INTERVAL_MS) return;
-
-  const stepMs = Math.min(accumulatorMs, MAX_TICK_DT * 1000);
-  const dt = stepMs / 1000;
-  accumulatorMs %= FRAME_INTERVAL_MS;
   const activeSharks = sharksVisible ? sharks : [];
 
   fishState.forEach((fish) => {
@@ -321,29 +338,21 @@ const tick = () => {
     clampSpeed(fish, minSpeed, maxSpeed);
     advanceAndWrapPosition(fish, viewport, dt);
   });
-
-  postFrame();
-};
-
-const startLoop = () => {
-  stopLoop();
-  lastTime = performance.now();
-  accumulatorMs = 0;
-  timerId = self.setInterval(tick, FRAME_INTERVAL_MS);
 };
 
 self.onmessage = (event) => {
   const { type, payload } = event.data || {};
 
   if (type === 'init') {
+    resetStats();
     viewport = payload?.viewport || viewport;
     fishState = createFishState(payload?.creatures || [], viewport);
     groups = groupFishByGroup(fishState);
     anglers = fishState.filter((fish) => fish.isAngler);
     sharks = fishState.filter((fish) => fish.isShark);
     sharksVisible = Boolean(payload?.sharksVisible);
-
-    startLoop();
+    isActive = payload?.active !== false;
+    lastTime = performance.now();
     postFrame();
     return;
   }
@@ -358,11 +367,40 @@ self.onmessage = (event) => {
     return;
   }
 
+  if (type === 'set-active') {
+    isActive = Boolean(payload?.active);
+    if (isActive) {
+      lastTime = performance.now();
+    }
+    return;
+  }
+
+  if (type === 'request-frame') {
+    if (!isActive) return;
+    stats.requestFrameMessages += 1;
+    const now = performance.now();
+    const elapsedMs = lastTime > 0 ? now - lastTime : 16.7;
+    lastTime = now;
+    const dt = Math.min(Math.max(elapsedMs, 0), MAX_TICK_DT * 1000) / 1000;
+    tick(dt);
+    postFrame();
+    return;
+  }
+
+  if (type === 'get-stats') {
+    self.postMessage({
+      type: 'stats',
+      stats: snapshotStats()
+    });
+    return;
+  }
+
   if (type === 'stop') {
-    stopLoop();
     fishState = [];
     groups = new Map();
     anglers = [];
     sharks = [];
+    lastTime = 0;
+    resetStats();
   }
 };
