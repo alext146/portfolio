@@ -15,33 +15,64 @@ html {
 
 body {
   margin: 0;
-  background: radial-gradient(circle at 20% 15%, rgba(0, 200, 255, 0.25), transparent 45%),
-    radial-gradient(circle at 80% 10%, rgba(0, 255, 200, 0.18), transparent 40%),
-    linear-gradient(180deg, #031827 0%, #021018 55%, #01060a 100%);
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08), transparent 55%),
-    radial-gradient(circle at 20% 80%, rgba(0, 120, 255, 0.08), transparent 50%);
-  z-index: -1;
-}
-
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.05) 0%, transparent 45%, rgba(0, 180, 255, 0.08) 100%);
-  opacity: 0.4;
-  pointer-events: none;
-  z-index: -2;
+  background: #01060a;
 }
 
 .app {
   position: relative;
   z-index: 1;
+}
+
+.ocean-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ocean-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    hsl(195 80% calc(32% - (var(--ocean-depth) * 12%))) 0%,
+    hsl(205 85% calc(20% - (var(--ocean-depth) * 8%))) 45%,
+    hsl(220 70% calc(8% - (var(--ocean-depth) * 4%))) 100%
+  );
+  transition: background 0.2s ease;
+}
+
+.ocean-light {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, calc(0.18 - var(--ocean-depth) * 0.12)),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(0, 200, 255, calc(0.2 - var(--ocean-depth) * 0.1)),
+      transparent 50%
+    );
+}
+
+.ocean-bubbles {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 120px 120px, 180px 180px, 220px 220px;
+  background-position: 20px 10px, 80px 40px, 140px 90px;
+  opacity: calc(0.25 - var(--ocean-depth) * 0.15);
+}
+
+.ocean-creature {
+  position: absolute;
+  filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.4));
+  transition: opacity 0.3s ease;
 }
 
 a {

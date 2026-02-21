@@ -1,0 +1,6 @@
+<svg width="240" height="120" viewBox="0 0 240 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M25 70C40 40 80 25 120 30C160 35 200 55 215 78C190 76 175 82 160 92C145 102 120 110 90 108C60 106 35 92 25 70Z" fill="#d6f5ff" fill-opacity="0.65"/>
+  <path d="M80 40C65 25 40 18 20 22C40 40 55 52 75 56" fill="#d6f5ff" fill-opacity="0.5"/>
+  <path d="M155 84C165 96 185 104 205 100C190 88 180 78 160 70" fill="#d6f5ff" fill-opacity="0.5"/>
+  <circle cx="150" cy="62" r="3" fill="#e8fbff" fill-opacity="0.7"/>
+</svg>
