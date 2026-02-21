@@ -1,0 +1,21 @@
+<svg width="300" height="160" viewBox="0 0 300 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sharkTop" x1="28" y1="62" x2="260" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7e939d"/>
+      <stop offset="0.55" stop-color="#5b727e"/>
+      <stop offset="1" stop-color="#3f5763"/>
+    </linearGradient>
+    <linearGradient id="sharkBelly" x1="102" y1="84" x2="232" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d4dde1" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#96a7b0" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 88C42 66 84 52 137 50C189 48 236 59 276 82C256 84 240 91 226 104C207 121 180 132 147 134C107 136 69 123 42 105C32 99 25 93 20 88Z" fill="url(#sharkTop)"/>
+  <path d="M114 86C144 78 182 82 214 98C194 112 170 119 141 120C118 121 97 117 80 108C90 100 101 92 114 86Z" fill="url(#sharkBelly)"/>
+  <path d="M136 53C131 34 139 20 154 14C171 22 178 37 172 53" fill="#4e6571"/>
+  <path d="M62 79C49 68 39 54 40 41C53 50 65 62 72 74" fill="#4e6571"/>
+  <path d="M227 104C242 115 260 123 279 124C263 112 250 98 242 88" fill="#506874"/>
+  <path d="M227 104C241 97 252 85 258 72" stroke="#6f8793" stroke-opacity="0.7" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="184" cy="73" r="2.4" fill="#273944"/>
+  <path d="M170 83C172 88 172 93 169 98M161 85C162 90 162 95 160 99M152 86C153 91 153 95 151 100" stroke="#2f4753" stroke-opacity="0.65" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

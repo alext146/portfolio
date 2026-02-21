@@ -1,22 +1,32 @@
-# Alex Trahan - Portfolio
-My portflio utilizing Bootstrap &amp; Three.js: a javascript library for creating 3d environments in browser.
+# Alex Trahan — Portfolio (React)
 
-## Releases: 
-### 0.6.2 (04/01/22):
-	- Added upload for RockPaperScissors and blog post associated with it.
-	
-### 0.6.1 (03/28/22):
-	- Added announcement for a group project called EndGameMaps!
+A React + Vite rewrite of the original portfolio.
 
-### 0.6
-	- Successfully implemented contact page, so now messages are sent to myself.  Using GoogleForms as DB.
-	
-Still am looking for time to reformat About page to properly fit onto screens especially mobile.
-Also must still adjust Boostrap and CSS to fix opacity on Projects/Code page.
+## Quick start
+```bash
+npm install
+npm run dev
+```
 
-### 0.5.1a
-	-added link for blog
-   
-### 0.5a
-	- initial release
-   	- need to refactor bootstrap layouts to overlay properly with Three's canvas element
+## Scripts
+- `npm run dev` — local dev server
+- `npm run build` — production build
+- `npm run preview` — preview production build
+
+## Structure
+- `index.html` — Vite entry
+- `src/App.jsx` — app shell
+- `src/components/` — UI sections (Nav, Hero, About, Experience, Projects, Contact, Footer)
+- `src/data/profile.js` — content + links
+- `src/utils/forms.js` — Google Form helpers
+- `src/styles.css` — global styling
+- `public/assets/` — images/icons
+
+## Notes
+- Contact form posts to the existing Google Form endpoint.
+- Update project content in `src/data/profile.js`.
+
+---
+
+## Legacy notes (pre‑React)
+Older HTML/Three.js assets remain in the repo for reference.

@@ -1,16 +1,20 @@
 {
-  "dependencies": {
-    "animate": "^1.0.0",
-    "three": "^0.138.0"
-  },
-  "name": "reorg",
-  "version": "1.0.0",
-  "main": "main.js",
-  "devDependencies": {},
+  "name": "portfolio",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Alex Trahan portfolio (React + Vite)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
+    "vite": "^5.0.0"
+  }
 }
