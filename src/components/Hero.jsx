@@ -1,6 +1,8 @@
 import { heroStats, profile } from '../data/profile';
 
 export default function Hero() {
+  const baseUrl = import.meta.env.BASE_URL;
+
   return (
     <section id="top" className="hero">
       <div className="container hero__inner">
@@ -18,7 +20,7 @@ export default function Hero() {
         </div>
         <div className="hero__visual">
           <div className="hero__card">
-            <img src="/assets/profile-image.png" alt="Alex portrait" />
+            <img src={`${baseUrl}assets/profile-image.png`} alt="Alex portrait" />
             <div className="hero__card-text">
               <strong>{profile.name}</strong>
               <span>{profile.stackLine}</span>

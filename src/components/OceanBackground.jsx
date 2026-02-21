@@ -86,6 +86,8 @@ const createSeaweedPatches = (count = 5) => {
 };
 
 export default function OceanBackground() {
+  const baseUrl = import.meta.env.BASE_URL;
+  const asset = (path) => `${baseUrl}${path.replace(/^\//, '')}`;
   const [depth, setDepth] = useState(0);
   const laneRefs = useRef(new Map());
   const depthRef = useRef(0);
@@ -179,7 +181,7 @@ export default function OceanBackground() {
       ...schools,
       {
         id: 'anglerfish',
-        src: '/assets/creatures/angler.svg',
+        src: asset('assets/creatures/angler.svg'),
         alt: '',
         zone: 'abyss',
         group: 'angler',
@@ -374,7 +376,7 @@ export default function OceanBackground() {
           {seaweedPatches.map((patch) => (
             <img
               key={patch.id}
-              src="/assets/creatures/seaweed.svg"
+              src={asset('assets/creatures/seaweed.svg')}
               alt=""
               className="ocean-seaweed"
               style={{
