@@ -14,9 +14,18 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
       directionTravel.current = 0;
     };
 
+    const getMaxScrollY = () => {
+      const doc = document.documentElement;
+      const body = document.body;
+      const scrollHeight = Math.max(doc?.scrollHeight || 0, body?.scrollHeight || 0);
+      const viewportHeight = Math.max(doc?.clientHeight || 0, window.innerHeight || 0);
+      return Math.max(0, scrollHeight - viewportHeight);
+    };
+
     const updateVisibility = () => {
       const isMobile = window.innerWidth <= 900;
       const currentScroll = Math.max(0, window.scrollY || document.documentElement.scrollTop);
+      const maxScrollY = getMaxScrollY();
 
       if (!isMobile || menuOpen) {
         setNavHidden(false);
@@ -27,8 +36,9 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
 
       const delta = currentScroll - lastScrollY.current;
       const nearTop = currentScroll < 24;
+      const nearBottom = maxScrollY - currentScroll < 24;
 
-      if (nearTop) {
+      if (nearTop || nearBottom) {
         setNavHidden(false);
         resetTravel();
       } else if (Math.abs(delta) >= 0.5) {
@@ -52,6 +62,10 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
           setNavHidden(true);
           directionTravel.current = 0;
         } else if (direction < 0 && directionTravel.current >= SHOW_TRAVEL_PX) {
+          setNavHidden(false);
+          directionTravel.current = 0;
+        } else if (direction < 0 && Math.abs(delta) >= 1.8) {
+          // Reveal quickly on deliberate upward scroll to avoid sticky-hidden states on mobile.
           setNavHidden(false);
           directionTravel.current = 0;
         }

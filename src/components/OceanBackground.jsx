@@ -22,6 +22,8 @@ const FISH_PARALLAX_DEPTH_TOP_SCALE = 196;
 const FISH_PARALLAX_MICRO_SCROLL_BASE = 4;
 const FISH_PARALLAX_MICRO_SCROLL_TOP_SCALE = 10;
 const FISH_SCROLL_PARALLAX_MAX_SHIFT = 360;
+const MOBILE_RESIZE_WIDTH_IGNORE_PX = 24;
+const MOBILE_RESIZE_HEIGHT_IGNORE_PX = 120;
 const DESKTOP_FISH_DENSITY = 1;
 const MOBILE_FISH_DENSITY = 1;
 const LOW_POWER_MOBILE_FISH_DENSITY = 1;
@@ -270,6 +272,30 @@ const getFishCanvasPixelRatio = () => {
 	const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
 	const cap = isSmallScreen || isCoarsePointer ? MOBILE_CANVAS_MAX_DPR : DESKTOP_CANVAS_MAX_DPR;
 	return clamp(window.devicePixelRatio || 1, 1, cap);
+};
+
+const isMobileLikeViewport = () => {
+	if (typeof window === "undefined") return false;
+	return window.matchMedia("(max-width: 900px)").matches || window.matchMedia("(pointer: coarse)").matches;
+};
+
+const getViewportSize = () => {
+	if (typeof window === "undefined") return { width: 1, height: 1 };
+	const doc = document.documentElement;
+	return {
+		width: Math.max(1, Math.round(doc?.clientWidth || window.innerWidth || 1)),
+		height: Math.max(1, Math.round(doc?.clientHeight || window.innerHeight || 1)),
+	};
+};
+
+const shouldHandleViewportResize = (previousViewport, nextViewport) => {
+	if (!previousViewport || !nextViewport) return true;
+
+	const widthDelta = Math.abs(nextViewport.width - previousViewport.width);
+	const heightDelta = Math.abs(nextViewport.height - previousViewport.height);
+
+	if (!isMobileLikeViewport()) return true;
+	return widthDelta >= MOBILE_RESIZE_WIDTH_IGNORE_PX || heightDelta >= MOBILE_RESIZE_HEIGHT_IGNORE_PX;
 };
 
 const getFishParallaxShift = (fish, depthValue, scrollValue, viewportHeight) => {
@@ -700,7 +726,7 @@ const renderFishNode = (fish, laneMap, depthRef, scrollRef) => {
 	if (!node) return;
 
 	const yaw = clamp((fish.vy / Math.max(Math.abs(fish.vx), 1)) * 12, -12, 12);
-	const viewportHeight = typeof window !== "undefined" ? Math.max(window.innerHeight || 1, 1) : 1;
+	const viewportHeight = getViewportSize().height;
 	const parallaxShift = getFishParallaxShift(
 		fish,
 		depthRef.current,
@@ -753,10 +779,14 @@ export default function OceanBackground() {
 
 	useEffect(() => {
 		let ticking = false;
+		let viewport = getViewportSize();
 
 		const updateDepth = () => {
-			const scrollTop = window.scrollY || document.documentElement.scrollTop;
-			const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+			const scrollTop =
+				window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+			const docHeight =
+				Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0) -
+				viewport.height;
 			const progress = docHeight > 0 ? scrollTop / docHeight : 0;
 
 			setDepth(clamp(progress));
@@ -774,13 +804,21 @@ export default function OceanBackground() {
 			window.requestAnimationFrame(updateDepth);
 		};
 
+		const onResize = () => {
+			const nextViewport = getViewportSize();
+			const handleResize = shouldHandleViewportResize(viewport, nextViewport);
+			viewport = nextViewport;
+			if (!handleResize) return;
+			onScroll();
+		};
+
 		updateDepth();
 		window.addEventListener("scroll", onScroll, { passive: true });
-		window.addEventListener("resize", onScroll);
+		window.addEventListener("resize", onResize);
 
 		return () => {
 			window.removeEventListener("scroll", onScroll);
-			window.removeEventListener("resize", onScroll);
+			window.removeEventListener("resize", onResize);
 		};
 	}, []);
 
@@ -846,8 +884,9 @@ export default function OceanBackground() {
 			const canvas = fishCanvasRef.current;
 			if (!canvas) return false;
 
-			const cssWidth = Math.max(1, Math.round(window.innerWidth));
-			const cssHeight = Math.max(1, Math.round(window.innerHeight));
+			const viewport = getViewportSize();
+			const cssWidth = viewport.width;
+			const cssHeight = viewport.height;
 			const nextDpr = getFishCanvasPixelRatio();
 			const nextWidth = Math.max(1, Math.round(cssWidth * nextDpr));
 			const nextHeight = Math.max(1, Math.round(cssHeight * nextDpr));
@@ -889,9 +928,9 @@ export default function OceanBackground() {
 			if (!Array.isArray(fishFrame) || fishFrame.length === 0) return;
 
 			const zoneOpacityByZone = zoneOpacitiesRef.current;
-				const depthValue = depthRef.current;
-				const scrollValue = scrollRef.current;
-				const viewportHeight = Math.max(window.innerHeight || 1, 1);
+			const depthValue = depthRef.current;
+			const scrollValue = scrollRef.current;
+			const viewportHeight = getViewportSize().height;
 
 			for (let i = 0; i < fishFrame.length; i += 1) {
 				const fish = fishFrame[i];
@@ -1081,29 +1120,30 @@ export default function OceanBackground() {
 				renderRafId = window.requestAnimationFrame(flushFrame);
 			};
 
+			const initialViewport = getViewportSize();
 			worker.postMessage({
 				type: "init",
 				payload: {
 					creatures,
-					viewport: {
-						width: window.innerWidth,
-						height: window.innerHeight,
-					},
+					viewport: initialViewport,
 					sharksVisible: sharksVisibleRef.current,
 					active: document.visibilityState === "visible",
 				},
 			});
 
+			let resizeViewport = initialViewport;
 			const onResize = () => {
+				const nextViewport = getViewportSize();
+				const handleResize = shouldHandleViewportResize(resizeViewport, nextViewport);
+				resizeViewport = nextViewport;
+				if (!handleResize) return;
+
 				frameIntervalMs = getFrameIntervalMs();
 				ensureFishCanvas();
 				worker.postMessage({
 					type: "resize",
 					payload: {
-						viewport: {
-							width: window.innerWidth,
-							height: window.innerHeight,
-						},
+						viewport: nextViewport,
 					},
 				});
 			};
@@ -1170,7 +1210,8 @@ export default function OceanBackground() {
 			};
 		}
 
-		const viewport = { width: window.innerWidth, height: window.innerHeight };
+		const initialViewport = getViewportSize();
+		const viewport = { width: initialViewport.width, height: initialViewport.height };
 		const fishState = createFishState(creatures, viewport);
 		const groups = groupFishByGroup(fishState);
 		const anglers = fishState.filter((fish) => fish.isAngler);
@@ -1179,9 +1220,15 @@ export default function OceanBackground() {
 		let rafId = 0;
 		let lastTime = performance.now();
 		let accumulatorMs = 0;
+		let resizeViewport = initialViewport;
 		const onResize = () => {
-			viewport.width = window.innerWidth;
-			viewport.height = window.innerHeight;
+			const nextViewport = getViewportSize();
+			const handleResize = shouldHandleViewportResize(resizeViewport, nextViewport);
+			resizeViewport = nextViewport;
+			if (!handleResize) return;
+
+			viewport.width = nextViewport.width;
+			viewport.height = nextViewport.height;
 			frameIntervalMs = getFrameIntervalMs();
 			ensureFishCanvas();
 		};
