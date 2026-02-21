@@ -216,6 +216,15 @@ textarea {
 	animation: seaweed-sway 8.4s ease-in-out infinite;
 }
 
+.ocean-fish-canvas {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 1;
+}
+
 .ocean-creature-lane {
 	position: absolute;
 	left: 0;
@@ -256,17 +265,17 @@ textarea {
 }
 
 .ocean-creature-wrapper--twilight .ocean-creature {
-	opacity: 0.86;
-	--creature-saturation: 0.74;
-	--creature-brightness: 0.86;
-	--creature-contrast: 0.97;
+	opacity: 0.92;
+	--creature-saturation: 0.86;
+	--creature-brightness: 0.96;
+	--creature-contrast: 1.02;
 }
 
 .ocean-creature-wrapper--midnight .ocean-creature {
-	opacity: 0.8;
-	--creature-saturation: 0.64;
-	--creature-brightness: 0.76;
-	--creature-contrast: 0.96;
+	opacity: 0.88;
+	--creature-saturation: 0.78;
+	--creature-brightness: 0.9;
+	--creature-contrast: 1.02;
 }
 
 .ocean-creature-wrapper--abyss .ocean-creature {
