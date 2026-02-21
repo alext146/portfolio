@@ -1144,8 +1144,8 @@ textarea {
 	.ocean-depth-haze,
 	.ocean-depth-dim,
 	.ocean-foreground-haze {
-		--ocean-scroll-factor: 0.42;
-		--ocean-parallax-factor: 0.62;
+		--ocean-scroll-factor: 1;
+		--ocean-parallax-factor: 1;
 	}
 	.ocean-seafloor {
 		bottom: -20vh;
@@ -1153,8 +1153,8 @@ textarea {
 		transform: translateY(
 			calc(
 				20vh - var(--ocean-bottom) * 20vh +
-					(var(--ocean-parallax) * 18px) -
-					(var(--ocean-scroll-y, 0px) * 0.008)
+					(var(--ocean-parallax) * 36px) -
+					(var(--ocean-scroll-y, 0px) * 0.018)
 			)
 		);
 	}

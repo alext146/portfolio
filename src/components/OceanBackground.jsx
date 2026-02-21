@@ -21,8 +21,8 @@ const FISH_SCROLL_PARALLAX_PER_SCREEN_BASE = 28;
 const FISH_SCROLL_PARALLAX_PER_SCREEN_TOP_SCALE = 82;
 const FISH_SCROLL_PARALLAX_MAX_SHIFT = 560;
 const DESKTOP_FISH_DENSITY = 1;
-const MOBILE_FISH_DENSITY = 0.72;
-const LOW_POWER_MOBILE_FISH_DENSITY = 0.62;
+const MOBILE_FISH_DENSITY = 1;
+const LOW_POWER_MOBILE_FISH_DENSITY = 1;
 const MOBILE_CANVAS_MAX_DPR = 1.35;
 const DESKTOP_CANVAS_MAX_DPR = 1.8;
 const DESKTOP_ZONE_DENSITY_MULTIPLIERS = Object.freeze({
@@ -33,15 +33,15 @@ const DESKTOP_ZONE_DENSITY_MULTIPLIERS = Object.freeze({
 });
 const MOBILE_ZONE_DENSITY_MULTIPLIERS = Object.freeze({
 	sunlight: 0.9,
-	twilight: 1.5,
-	midnight: 1.7,
-	abyss: 0.92,
+	twilight: 1.35,
+	midnight: 1.5,
+	abyss: 0.88,
 });
 const LOW_POWER_MOBILE_ZONE_DENSITY_MULTIPLIERS = Object.freeze({
-	sunlight: 0.85,
-	twilight: 1.32,
+	sunlight: 0.9,
+	twilight: 1.35,
 	midnight: 1.5,
-	abyss: 0.86,
+	abyss: 0.88,
 });
 const OCEAN_FPS_QUERY_PARAM = "fps";
 const OCEAN_FPS_STORAGE_KEY = "oceanFps";
