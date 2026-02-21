@@ -69,10 +69,26 @@ body {
   opacity: calc(0.25 - var(--ocean-depth) * 0.15);
 }
 
-.ocean-creature {
+.ocean-creature-wrapper {
   position: absolute;
+  animation: float 18s ease-in-out infinite;
   filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.4));
   transition: opacity 0.3s ease;
+}
+
+.ocean-creature {
+  width: 100%;
+  display: block;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(-6px);
+  }
+  50% {
+    transform: translateY(6px);
+  }
 }
 
 a {
