@@ -17,8 +17,10 @@ const MOBILE_TARGET_FPS = 48;
 const LOW_POWER_TARGET_FPS = 36;
 const MIN_TARGET_FPS = 15;
 const MAX_TARGET_FPS = 60;
-const FISH_SCROLL_PARALLAX_BASE = 0.032;
-const FISH_SCROLL_PARALLAX_DEPTH_SCALE = 0.04;
+const FISH_DEPTH_PARALLAX_BASE = 8;
+const FISH_DEPTH_PARALLAX_TOP_SCALE = 24;
+const FISH_SCROLL_PARALLAX_PER_SCREEN_BASE = 18;
+const FISH_SCROLL_PARALLAX_PER_SCREEN_TOP_SCALE = 40;
 const DESKTOP_FISH_DENSITY = 1;
 const MOBILE_FISH_DENSITY = 0.72;
 const LOW_POWER_MOBILE_FISH_DENSITY = 0.62;
@@ -267,6 +269,18 @@ const getFishCanvasPixelRatio = () => {
 	const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
 	const cap = isSmallScreen || isCoarsePointer ? MOBILE_CANVAS_MAX_DPR : DESKTOP_CANVAS_MAX_DPR;
 	return clamp(window.devicePixelRatio || 1, 1, cap);
+};
+
+const getFishParallaxShift = (fish, depthValue, scrollValue, viewportHeight) => {
+	const topWeight = 1 - clamp(fish.yUnit, 0, 1);
+	const depthParallaxShift =
+		(depthValue - 0.5) * -(FISH_DEPTH_PARALLAX_BASE + topWeight * FISH_DEPTH_PARALLAX_TOP_SCALE);
+	const scrollScreens = scrollValue / Math.max(viewportHeight, 1);
+	const scrollParallaxShift =
+		scrollScreens *
+		(FISH_SCROLL_PARALLAX_PER_SCREEN_BASE + topWeight * FISH_SCROLL_PARALLAX_PER_SCREEN_TOP_SCALE);
+
+	return depthParallaxShift - scrollParallaxShift;
 };
 
 const bytesToMB = (bytes) => {
@@ -669,11 +683,13 @@ const renderFishNode = (fish, laneMap, depthRef, scrollRef) => {
 	if (!node) return;
 
 	const yaw = clamp((fish.vy / Math.max(Math.abs(fish.vx), 1)) * 12, -12, 12);
-	const depthParallaxShift = (depthRef.current - 0.5) * -(8 + fish.yUnit * 22);
-	const scrollParallaxShift =
-		scrollRef.current *
-		(FISH_SCROLL_PARALLAX_BASE + fish.yUnit * FISH_SCROLL_PARALLAX_DEPTH_SCALE);
-	const parallaxShift = depthParallaxShift - scrollParallaxShift;
+	const viewportHeight = typeof window !== "undefined" ? Math.max(window.innerHeight || 1, 1) : 1;
+	const parallaxShift = getFishParallaxShift(
+		fish,
+		depthRef.current,
+		scrollRef.current,
+		viewportHeight
+	);
 	const facing = fish.vx < 0 ? -1 : 1;
 	const facingForSpecies = fish.isShark ? -facing : facing;
 	const baseYawForFacing = facingForSpecies < 0 ? -yaw : yaw;
@@ -857,6 +873,7 @@ export default function OceanBackground() {
 			const zoneOpacityByZone = zoneOpacitiesRef.current;
 			const depthValue = depthRef.current;
 			const scrollValue = scrollRef.current;
+			const viewportHeight = Math.max(window.innerHeight || 1, 1);
 
 			for (let i = 0; i < fishFrame.length; i += 1) {
 				const fish = fishFrame[i];
@@ -869,11 +886,12 @@ export default function OceanBackground() {
 				if (zoneOpacity <= 0.01) continue;
 
 				const yaw = clamp((fish.vy / Math.max(Math.abs(fish.vx), 1)) * 12, -12, 12);
-				const depthParallaxShift = (depthValue - 0.5) * -(8 + fish.yUnit * 22);
-				const scrollParallaxShift =
-					scrollValue *
-					(FISH_SCROLL_PARALLAX_BASE + fish.yUnit * FISH_SCROLL_PARALLAX_DEPTH_SCALE);
-				const parallaxShift = depthParallaxShift - scrollParallaxShift;
+				const parallaxShift = getFishParallaxShift(
+					fish,
+					depthValue,
+					scrollValue,
+					viewportHeight
+				);
 				const facing = fish.vx < 0 ? -1 : 1;
 				const yawForFacing = facing < 0 ? -yaw : yaw;
 				const fishScale = (metadata.size / 24) * canvasDpr;
