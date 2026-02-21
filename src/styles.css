@@ -1224,8 +1224,8 @@ textarea {
 		transform: translateY(
 			calc(
 				20vh - var(--ocean-bottom) * 20vh +
-					(var(--ocean-parallax) * 36px) -
-					(var(--ocean-scroll-y, 0px) * 0.018)
+					(var(--ocean-parallax) * 44px) -
+					(var(--ocean-scroll-y, 0px) * 0.028)
 			)
 		);
 		transition:
@@ -1332,6 +1332,13 @@ textarea {
 	.ocean-seafloor {
 		bottom: -20vh;
 		height: 44vh;
+		transform: translateY(
+			calc(
+				20vh - var(--ocean-bottom) * 20vh +
+					(var(--ocean-parallax) * 48px) -
+					(var(--ocean-scroll-y, 0px) * 0.032)
+			)
+		);
 	}
 	.ocean-seafloor__flora {
 		inset: 8% -5% 12%;
