@@ -24,8 +24,10 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
 
     const updateVisibility = () => {
       const isMobile = window.innerWidth <= 900;
-      const currentScroll = Math.max(0, window.scrollY || document.documentElement.scrollTop);
       const maxScrollY = getMaxScrollY();
+      const viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+      const currentScrollRaw = Math.max(0, window.scrollY || document.documentElement.scrollTop);
+      const currentScroll = Math.min(currentScrollRaw, Math.max(maxScrollY, 0));
 
       if (!isMobile || menuOpen) {
         setNavHidden(false);
@@ -35,8 +37,12 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
       }
 
       const delta = currentScroll - lastScrollY.current;
-      const nearTop = currentScroll < 24;
-      const nearBottom = maxScrollY - currentScroll < 24;
+      const TOP_SAFE_ZONE_PX = 32;
+      const BOTTOM_SAFE_ZONE_MIN_PX = 108;
+      const BOTTOM_SAFE_ZONE_RATIO = 0.2;
+      const bottomSafeZonePx = Math.max(BOTTOM_SAFE_ZONE_MIN_PX, viewportHeight * BOTTOM_SAFE_ZONE_RATIO);
+      const nearTop = currentScroll < TOP_SAFE_ZONE_PX;
+      const nearBottom = maxScrollY - currentScroll <= bottomSafeZonePx;
 
       if (nearTop || nearBottom) {
         setNavHidden(false);
@@ -56,6 +62,7 @@ export default function Nav({ menuOpen, onToggle, onNavClick }) {
 
         if (
           direction > 0 &&
+          !nearBottom &&
           currentScroll > MIN_HIDE_SCROLL_Y &&
           directionTravel.current >= HIDE_TRAVEL_PX
         ) {

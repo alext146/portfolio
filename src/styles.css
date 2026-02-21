@@ -1227,7 +1227,7 @@ textarea {
 				(15 * var(--ocean-mobile-vh)) -
 					(var(--ocean-bottom) * 15 * var(--ocean-mobile-vh)) +
 					(var(--ocean-parallax) * 34px) -
-					(var(--ocean-scroll-y, 0px) * 0.018)
+					(var(--ocean-scroll-progress, 0) * 16px)
 			)
 		);
 		transition:
@@ -1339,7 +1339,7 @@ textarea {
 				(15 * var(--ocean-mobile-vh)) -
 					(var(--ocean-bottom) * 15 * var(--ocean-mobile-vh)) +
 					(var(--ocean-parallax) * 36px) -
-					(var(--ocean-scroll-y, 0px) * 0.019)
+					(var(--ocean-scroll-progress, 0) * 18px)
 			)
 		);
 	}

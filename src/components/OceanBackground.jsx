@@ -784,15 +784,17 @@ export default function OceanBackground() {
 		const updateDepth = () => {
 			const scrollTop =
 				window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
-			const docHeight =
+			const maxScrollY =
 				Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0) -
 				viewport.height;
-			const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+			const clampedScrollTop = clamp(scrollTop, 0, Math.max(maxScrollY, 0));
+			const progress = maxScrollY > 0 ? clampedScrollTop / maxScrollY : 0;
 
 			setDepth(clamp(progress));
-			scrollRef.current = scrollTop;
+			scrollRef.current = clampedScrollTop;
 			if (backgroundRef.current) {
-				backgroundRef.current.style.setProperty("--ocean-scroll-y", `${scrollTop}px`);
+				backgroundRef.current.style.setProperty("--ocean-scroll-y", `${clampedScrollTop}px`);
+				backgroundRef.current.style.setProperty("--ocean-scroll-progress", `${progress}`);
 			}
 
 			ticking = false;
@@ -1304,6 +1306,7 @@ export default function OceanBackground() {
 				"--ocean-bottom": bottomReveal,
 				"--ocean-parallax": depth - 0.5,
 				"--ocean-scroll-y": "0px",
+				"--ocean-scroll-progress": "0",
 			}}
 			aria-hidden="true"
 		>
