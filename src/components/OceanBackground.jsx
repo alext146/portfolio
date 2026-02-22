@@ -1327,7 +1327,9 @@ export default function OceanBackground() {
 		>
 			<div className="ocean-gradient" />
 			<div className="ocean-light" />
+			<div className="ocean-caustics" />
 			<div className="ocean-bubbles" />
+			<div className="ocean-marine-snow" />
 			<div className="ocean-depth-haze" />
 			<div className="ocean-seafloor">
 				<div className="ocean-seafloor__flora">
@@ -1405,6 +1407,7 @@ export default function OceanBackground() {
 			})}
 
 			<div className="ocean-depth-dim" />
+			<div className="ocean-depth-vignette" />
 			<div className="ocean-foreground-haze" />
 		</div>
 	);
