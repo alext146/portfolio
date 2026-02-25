@@ -167,7 +167,7 @@ textarea {
 		linear-gradient(180deg, hsl(34 32% 24%) 0%, hsl(26 27% 17%) 58%, hsl(20 24% 12%) 100%);
 	box-shadow: 0 -22px 62px rgba(0, 0, 0, 0.42);
 	opacity: calc(var(--ocean-bottom) * 0.96);
-	transform: translateY(calc(20vh - var(--ocean-bottom) * 20vh + (var(--ocean-parallax) * 36px) - (var(--ocean-scroll-y, 0px) * 0.018)));
+	transform: translateY(calc(20vh - var(--ocean-bottom) * 20vh + (var(--ocean-parallax) * 48px) - (var(--ocean-scroll-y, 0px) * 0.032)));
 	filter: brightness(calc(1.1 - var(--ocean-darkness, var(--ocean-depth)) * 0.2)) saturate(calc(1.06 - var(--ocean-darkness, var(--ocean-depth)) * 0.08));
 	z-index: 1;
 	isolation: isolate;
@@ -1440,8 +1440,8 @@ textarea {
 			calc(
 				(15 * var(--ocean-mobile-vh)) -
 					(var(--ocean-bottom) * 15 * var(--ocean-mobile-vh)) +
-					(var(--ocean-parallax) * 34px) -
-					(var(--ocean-scroll-progress, 0) * 16px)
+					(var(--ocean-parallax) * 52px) -
+					(var(--ocean-scroll-progress, 0) * 28px)
 			)
 		);
 		transition:
@@ -1552,8 +1552,8 @@ textarea {
 			calc(
 				(15 * var(--ocean-mobile-vh)) -
 					(var(--ocean-bottom) * 15 * var(--ocean-mobile-vh)) +
-					(var(--ocean-parallax) * 36px) -
-					(var(--ocean-scroll-progress, 0) * 18px)
+					(var(--ocean-parallax) * 56px) -
+					(var(--ocean-scroll-progress, 0) * 32px)
 			)
 		);
 	}

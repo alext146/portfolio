@@ -158,7 +158,7 @@ const applySharkAvoidance = (fish, sharks, dt) => {
   let sidestepX = 0;
   let sidestepY = 0;
   let panicLevel = 0;
-  const fearRadius = 190 + fish.yUnit * 86;
+  const fearRadius = 260 + fish.yUnit * 110;
 
   sharks.forEach((shark) => {
     const dx = fish.x - shark.x;
@@ -176,7 +176,13 @@ const applySharkAvoidance = (fish, sharks, dt) => {
     const forwardX = fishSpeed > 1 ? fish.vx / fishSpeed : fish.vx >= 0 ? 1 : -1;
     const forwardY = fishSpeed > 1 ? fish.vy / fishSpeed : 0;
     const behindFactor = clamp((forwardX * awayX + forwardY * awayY + 1) / 2, 0, 1);
-    const boostedFear = fear * (1 + behindFactor * 0.75);
+
+    const sharkSpeed = Math.hypot(shark.vx, shark.vy);
+    const sharkFwdX = sharkSpeed > 1 ? shark.vx / sharkSpeed : shark.vx >= 0 ? 1 : -1;
+    const sharkFwdY = sharkSpeed > 1 ? shark.vy / sharkSpeed : 0;
+    const inPathFactor = clamp((sharkFwdX * -awayX + sharkFwdY * -awayY + 0.3) / 1.3, 0, 1);
+
+    const boostedFear = fear * (1 + behindFactor * 1.6 + inPathFactor * 1.2);
 
     fleeX += awayX * boostedFear;
     fleeY += awayY * boostedFear;
@@ -189,8 +195,8 @@ const applySharkAvoidance = (fish, sharks, dt) => {
   });
 
   if (panicLevel > 0) {
-    fish.vx += (fleeX * 166 + sidestepX * 84) * dt;
-    fish.vy += (fleeY * 144 + sidestepY * 84) * dt;
+    fish.vx += (fleeX * 240 + sidestepX * 140) * dt;
+    fish.vy += (fleeY * 200 + sidestepY * 140) * dt;
   }
 
   return panicLevel;
@@ -328,8 +334,8 @@ const tick = (dt) => {
     let minSpeed = fish.speedMin;
     let maxSpeed = fish.speedMax;
     if (panicLevel > 0) {
-      minSpeed += panicLevel * 18;
-      maxSpeed += panicLevel * 14;
+      minSpeed += panicLevel * 28;
+      maxSpeed += panicLevel * 22;
     }
 
     applyRandomTurn(fish, dt, minSpeed, maxSpeed);

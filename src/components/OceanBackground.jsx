@@ -23,6 +23,12 @@ const FISH_PARALLAX_MICRO_SCROLL_BASE = 4;
 const FISH_PARALLAX_MICRO_SCROLL_TOP_SCALE = 10;
 const FISH_PARALLAX_SCROLL_PROGRESS_BASE = 0.1;
 const FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE = 0.24;
+const MOBILE_FISH_PARALLAX_DEPTH_BASE = 64;
+const MOBILE_FISH_PARALLAX_DEPTH_TOP_SCALE = 340;
+const MOBILE_FISH_PARALLAX_MICRO_SCROLL_BASE = 8;
+const MOBILE_FISH_PARALLAX_MICRO_SCROLL_TOP_SCALE = 20;
+const MOBILE_FISH_PARALLAX_SCROLL_PROGRESS_BASE = 0.18;
+const MOBILE_FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE = 0.42;
 const FISH_SCROLL_PARALLAX_MAX_SHIFT = 560;
 const MOBILE_RESIZE_WIDTH_IGNORE_PX = 24;
 const MOBILE_RESIZE_HEIGHT_IGNORE_PX = 120;
@@ -300,19 +306,22 @@ const shouldHandleViewportResize = (previousViewport, nextViewport) => {
 	return widthDelta >= MOBILE_RESIZE_WIDTH_IGNORE_PX || heightDelta >= MOBILE_RESIZE_HEIGHT_IGNORE_PX;
 };
 
-const getFishParallaxShift = (fish, depthValue, scrollValue, scrollProgress, viewportHeight) => {
+const getFishParallaxShift = (fish, depthValue, scrollValue, scrollProgress, viewportHeight, isMobile) => {
+	const depthBase = isMobile ? MOBILE_FISH_PARALLAX_DEPTH_BASE : FISH_PARALLAX_DEPTH_BASE;
+	const depthTopScale = isMobile ? MOBILE_FISH_PARALLAX_DEPTH_TOP_SCALE : FISH_PARALLAX_DEPTH_TOP_SCALE;
+	const microBase = isMobile ? MOBILE_FISH_PARALLAX_MICRO_SCROLL_BASE : FISH_PARALLAX_MICRO_SCROLL_BASE;
+	const microTopScale = isMobile ? MOBILE_FISH_PARALLAX_MICRO_SCROLL_TOP_SCALE : FISH_PARALLAX_MICRO_SCROLL_TOP_SCALE;
+	const progressBase = isMobile ? MOBILE_FISH_PARALLAX_SCROLL_PROGRESS_BASE : FISH_PARALLAX_SCROLL_PROGRESS_BASE;
+	const progressTopScale = isMobile ? MOBILE_FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE : FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE;
+
 	const topWeight = 1 - clamp(fish.yUnit, 0, 1);
-	const depthShift =
-		-clamp(depthValue, 0, 1) * (FISH_PARALLAX_DEPTH_BASE + topWeight * FISH_PARALLAX_DEPTH_TOP_SCALE);
+	const depthShift = -clamp(depthValue, 0, 1) * (depthBase + topWeight * depthTopScale);
 	const progressShift =
 		-clamp(scrollProgress, 0, 1) *
 		viewportHeight *
-		(FISH_PARALLAX_SCROLL_PROGRESS_BASE + topWeight * FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE);
+		(progressBase + topWeight * progressTopScale);
 	const scrollScreens = scrollValue / Math.max(viewportHeight, 1);
-	const microScrollShift = -(
-		scrollScreens *
-		(FISH_PARALLAX_MICRO_SCROLL_BASE + topWeight * FISH_PARALLAX_MICRO_SCROLL_TOP_SCALE)
-	);
+	const microScrollShift = -(scrollScreens * (microBase + topWeight * microTopScale));
 
 	return clamp(
 		depthShift + progressShift + microScrollShift,
@@ -640,7 +649,7 @@ const applySharkAvoidance = (fish, sharks, dt) => {
 	let sidestepX = 0;
 	let sidestepY = 0;
 	let panicLevel = 0;
-	const fearRadius = 190 + fish.yUnit * 86;
+	const fearRadius = 260 + fish.yUnit * 110;
 
 	sharks.forEach((shark) => {
 		const dx = fish.x - shark.x;
@@ -658,7 +667,13 @@ const applySharkAvoidance = (fish, sharks, dt) => {
 		const forwardX = fishSpeed > 1 ? fish.vx / fishSpeed : fish.vx >= 0 ? 1 : -1;
 		const forwardY = fishSpeed > 1 ? fish.vy / fishSpeed : 0;
 		const behindFactor = clamp((forwardX * awayX + forwardY * awayY + 1) / 2, 0, 1);
-		const boostedFear = fear * (1 + behindFactor * 0.75);
+
+		const sharkSpeed = Math.hypot(shark.vx, shark.vy);
+		const sharkFwdX = sharkSpeed > 1 ? shark.vx / sharkSpeed : shark.vx >= 0 ? 1 : -1;
+		const sharkFwdY = sharkSpeed > 1 ? shark.vy / sharkSpeed : 0;
+		const inPathFactor = clamp((sharkFwdX * -awayX + sharkFwdY * -awayY + 0.3) / 1.3, 0, 1);
+
+		const boostedFear = fear * (1 + behindFactor * 1.6 + inPathFactor * 1.2);
 
 		fleeX += awayX * boostedFear;
 		fleeY += awayY * boostedFear;
@@ -671,8 +686,8 @@ const applySharkAvoidance = (fish, sharks, dt) => {
 	});
 
 	if (panicLevel > 0) {
-		fish.vx += (fleeX * 166 + sidestepX * 84) * dt;
-		fish.vy += (fleeY * 144 + sidestepY * 84) * dt;
+		fish.vx += (fleeX * 240 + sidestepX * 140) * dt;
+		fish.vy += (fleeY * 200 + sidestepY * 140) * dt;
 	}
 
 	return panicLevel;
@@ -731,7 +746,7 @@ const advanceAndWrapPosition = (fish, viewport, dt) => {
 	}
 };
 
-const renderFishNode = (fish, laneMap, depthRef, scrollRef, scrollProgressRef) => {
+const renderFishNode = (fish, laneMap, depthRef, scrollRef, scrollProgressRef, isMobile) => {
 	const node = laneMap.get(fish.id);
 	if (!node) return;
 
@@ -742,7 +757,8 @@ const renderFishNode = (fish, laneMap, depthRef, scrollRef, scrollProgressRef) =
 		depthRef.current,
 		scrollRef.current,
 		scrollProgressRef.current,
-		viewportHeight
+		viewportHeight,
+		isMobile
 	);
 	const renderY = wrapFishRenderY(fish.y + parallaxShift, viewportHeight);
 	const facing = fish.vx < 0 ? -1 : 1;
@@ -947,6 +963,7 @@ export default function OceanBackground() {
 			const scrollValue = scrollRef.current;
 			const scrollProgressValue = scrollProgressRef.current;
 			const viewportHeight = getViewportSize().height;
+			const mobile = isMobileLikeViewport();
 
 			for (let i = 0; i < fishFrame.length; i += 1) {
 				const fish = fishFrame[i];
@@ -964,7 +981,8 @@ export default function OceanBackground() {
 					depthValue,
 					scrollValue,
 					scrollProgressValue,
-					viewportHeight
+					viewportHeight,
+					mobile
 				);
 				const renderY = wrapFishRenderY(fish.y + parallaxShift, viewportHeight);
 				const facing = fish.vx < 0 ? -1 : 1;
@@ -1104,11 +1122,12 @@ export default function OceanBackground() {
 				renderQueued = false;
 				if (!frame) return;
 				const renderStart = performance.now();
+				const mobile = isMobileLikeViewport();
 
 				renderSchoolFishCanvas(frame);
 				frame.forEach((fish) => {
 					if (fish.isSchoolFish) return;
-					renderFishNode(fish, laneRefs.current, depthRef, scrollRef, scrollProgressRef);
+					renderFishNode(fish, laneRefs.current, depthRef, scrollRef, scrollProgressRef, mobile);
 				});
 				if (profiler.enabled) {
 					profiler.renderFrames += 1;
@@ -1263,6 +1282,7 @@ export default function OceanBackground() {
 			const stepMs = Math.min(accumulatorMs, MAX_TICK_DT * 1000);
 			const dt = stepMs / 1000;
 			accumulatorMs %= frameIntervalMs;
+			const mobile = isMobileLikeViewport();
 
 			fishState.forEach((fish) => {
 				if (fish.isShark && !sharksVisibleRef.current) return;
@@ -1278,8 +1298,8 @@ export default function OceanBackground() {
 				let minSpeed = fish.speedMin;
 				let maxSpeed = fish.speedMax;
 				if (panicLevel > 0) {
-					minSpeed += panicLevel * 18;
-					maxSpeed += panicLevel * 14;
+					minSpeed += panicLevel * 28;
+					maxSpeed += panicLevel * 22;
 				}
 
 					applyRandomTurn(fish, dt, minSpeed, maxSpeed);
@@ -1288,7 +1308,7 @@ export default function OceanBackground() {
 					clampSpeed(fish, minSpeed, maxSpeed);
 					advanceAndWrapPosition(fish, viewport, dt);
 					if (!fish.isSchoolFish) {
-						renderFishNode(fish, laneRefs.current, depthRef, scrollRef, scrollProgressRef);
+						renderFishNode(fish, laneRefs.current, depthRef, scrollRef, scrollProgressRef, mobile);
 					}
 			});
 			renderSchoolFishCanvas(fishState);

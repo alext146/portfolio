@@ -17,23 +17,19 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false;
+    let cleanupTimeout = 0;
 
-    const revealBackground = () => {
-      if (!cancelled) setShowOceanBackground(true);
-    };
+    const rafId = window.requestAnimationFrame(() => {
+      if (cancelled) return;
+      cleanupTimeout = window.setTimeout(() => {
+        if (!cancelled) setShowOceanBackground(true);
+      }, 0);
+    });
 
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const idleId = window.requestIdleCallback(revealBackground, { timeout: 1500 });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(idleId);
-      };
-    }
-
-    const timeoutId = window.setTimeout(revealBackground, 350);
     return () => {
       cancelled = true;
-      window.clearTimeout(timeoutId);
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(cleanupTimeout);
     };
   }, []);
 
