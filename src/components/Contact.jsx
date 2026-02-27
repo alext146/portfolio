@@ -67,7 +67,7 @@ export default function Contact() {
                 required
               />
             </div>
-            <button className="btn" type="submit" disabled={isSending}>
+            <button className="btn btn--ghost" type="submit" disabled={isSending}>
               {isSending ? 'Sending…' : 'Send message'}
             </button>
             {status && (
