@@ -48,21 +48,28 @@ const createFishState = (creatures, viewport) => {
     const heading = initialDirection * (0.15 + rng() * 0.5);
     const speed = isSchoolFish ? 30 + rng() * 22 : 18 + rng() * 22;
 
+    const isPredator = creature.species === 'shark' || creature.species === 'angler';
+
     return {
       id: creature.id,
       group: creature.group || creature.id,
       isSchoolFish,
       isAngler: creature.species === 'angler',
       isShark,
+      isPredator,
       yUnit,
       x,
       y,
+      size: creature.size,
       vx: Math.cos(heading) * speed * initialDirection,
       vy: Math.sin(heading) * speed * (isSchoolFish ? 0.44 : 0.52),
       speedMin: isSchoolFish ? 24 + rng() * 6 : 14 + rng() * 4,
       speedMax: isSchoolFish ? 52 + rng() * 12 : 34 + rng() * 10,
       drift: isSchoolFish ? 0.24 + rng() * 0.36 : 0.4 + rng() * 0.8,
-      turnTimer: isSchoolFish ? 1.1 + rng() * 2.1 : 0.5 + rng() * 1.8
+      turnTimer: isSchoolFish ? 1.1 + rng() * 2.1 : 0.5 + rng() * 1.8,
+      eaten: false,
+      dashTimer: 0,
+      dashCooldown: isPredator ? 2 + rng() * 3 : 0
     };
   });
 };
@@ -136,15 +143,31 @@ const applyAnglerAvoidance = (fish, anglers, dt) => {
     if (distSq < 1 || distSq > fearRadius * fearRadius) return;
 
     const dist = Math.sqrt(distSq);
-    const fear = (fearRadius - dist) / fearRadius;
+
+    // Determine angler's facing direction
+    const anglerSpeed = Math.hypot(angler.vx, angler.vy);
+    const anglerFwdX = anglerSpeed > 1 ? angler.vx / anglerSpeed : angler.vx >= 0 ? 1 : -1;
+    const anglerFwdY = anglerSpeed > 1 ? angler.vy / anglerSpeed : 0;
+
+    // How much the fish is in front of the angler's mouth (dot product of angler forward and direction to fish)
+    const toFishX = -dx / dist;
+    const toFishY = -dy / dist;
+    const inFrontFactor = anglerFwdX * toFishX + anglerFwdY * toFishY;
+
+    // Only scared if in front of the angler (cone facing its mouth), not behind
+    if (inFrontFactor < -0.1) return;
+
+    const coneFactor = clamp((inFrontFactor + 0.1) / 1.1, 0, 1);
+    const fear = (fearRadius - dist) / fearRadius * coneFactor;
+
     fleeX += (dx / dist) * fear;
     fleeY += (dy / dist) * fear;
     panicLevel = Math.max(panicLevel, fear);
   });
 
   if (panicLevel > 0) {
-    fish.vx += fleeX * dt * 148;
-    fish.vy += fleeY * dt * 126;
+    fish.vx += fleeX * dt * 180;
+    fish.vy += fleeY * dt * 150;
   }
 
   return panicLevel;
@@ -238,6 +261,111 @@ const clampSpeed = (fish, minSpeed, maxSpeed) => {
   }
 };
 
+const EAT_RADIUS_ANGLER = 30;
+const EAT_RADIUS_SHARK = 14;
+const DASH_DETECT_RADIUS = 120;
+const DASH_SPEED_MULTIPLIER_SHARK = 2.8;
+const DASH_SPEED_MULTIPLIER_ANGLER = 4.5;
+const DASH_MAX_DURATION = 1.5;
+const DASH_COOLDOWN_MIN = 5;
+const DASH_COOLDOWN_MAX = 12;
+
+const applyPredatorDash = (predator, schoolFish, dt) => {
+  // If dashing, steer toward the nearest prey and keep going until catch or timeout
+  if (predator.dashTimer > 0) {
+    predator.dashTimer -= dt;
+
+    // Re-acquire nearest prey to steer toward during dash
+    const speed = Math.hypot(predator.vx, predator.vy);
+    const fwdX = speed > 1 ? predator.vx / speed : predator.vx >= 0 ? 1 : -1;
+    const fwdY = speed > 1 ? predator.vy / speed : 0;
+    let nearestDist = DASH_DETECT_RADIUS * 1.5;
+    let steerX = fwdX;
+    let steerY = fwdY;
+
+    for (let i = 0; i < schoolFish.length; i += 1) {
+      const prey = schoolFish[i];
+      if (prey.eaten) continue;
+      const dx = prey.x - predator.x;
+      const dy = prey.y - predator.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 1 || dist > nearestDist) continue;
+      nearestDist = dist;
+      steerX = dx / dist;
+      steerY = dy / dist;
+    }
+
+    const dashSpeed = predator.speedMax * (predator.isAngler ? DASH_SPEED_MULTIPLIER_ANGLER : DASH_SPEED_MULTIPLIER_SHARK);
+    predator.vx = steerX * dashSpeed;
+    predator.vy = steerY * dashSpeed;
+    return;
+  }
+
+  predator.dashCooldown -= dt;
+  if (predator.dashCooldown > 0) return;
+
+  // Find nearest school fish in a tight forward cone
+  const speed = Math.hypot(predator.vx, predator.vy);
+  const fwdX = speed > 1 ? predator.vx / speed : predator.vx >= 0 ? 1 : -1;
+  const fwdY = speed > 1 ? predator.vy / speed : 0;
+
+  let nearestDist = DASH_DETECT_RADIUS;
+  let targetX = 0;
+  let targetY = 0;
+  let found = false;
+
+  for (let i = 0; i < schoolFish.length; i += 1) {
+    const prey = schoolFish[i];
+    if (prey.eaten) continue;
+
+    const dx = prey.x - predator.x;
+    const dy = prey.y - predator.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 1 || dist > DASH_DETECT_RADIUS) continue;
+
+    // Tight forward cone — prey must be nearly directly ahead
+    const dot = (dx / dist) * fwdX + (dy / dist) * fwdY;
+    if (dot < 0.65) continue;
+
+    if (dist < nearestDist) {
+      nearestDist = dist;
+      targetX = dx / dist;
+      targetY = dy / dist;
+      found = true;
+    }
+  }
+
+  if (found) {
+    const dashSpeed = predator.speedMax * (predator.isAngler ? DASH_SPEED_MULTIPLIER_ANGLER : DASH_SPEED_MULTIPLIER_SHARK);
+    predator.vx = targetX * dashSpeed;
+    predator.vy = targetY * dashSpeed;
+    predator.dashTimer = DASH_MAX_DURATION;
+    predator.dashCooldown = DASH_COOLDOWN_MIN + Math.random() * (DASH_COOLDOWN_MAX - DASH_COOLDOWN_MIN);
+  }
+};
+
+const checkPredatorEating = (predator, schoolFish) => {
+  const eatRadius = predator.isAngler ? EAT_RADIUS_ANGLER : EAT_RADIUS_SHARK;
+  const eatenIds = [];
+
+  for (let i = 0; i < schoolFish.length; i += 1) {
+    const prey = schoolFish[i];
+    if (prey.eaten) continue;
+
+    const dx = prey.x - predator.x;
+    const dy = prey.y - predator.y;
+    const distSq = dx * dx + dy * dy;
+
+    if (distSq < eatRadius * eatRadius) {
+      prey.eaten = true;
+      eatenIds.push(prey.id);
+    }
+  }
+
+  return eatenIds;
+};
+
 const advanceAndWrapPosition = (fish, viewport, dt) => {
   fish.x += fish.vx * dt;
   fish.y += fish.vy * dt;
@@ -296,21 +424,34 @@ const snapshotStats = () => {
   };
 };
 
+let eatenFishIds = [];
+let schoolFishCache = [];
+
+const rebuildSchoolFishCache = () => {
+  schoolFishCache = fishState.filter((f) => f.isSchoolFish && !f.eaten);
+};
+
 const postFrame = () => {
   stats.framesPosted += 1;
-  self.postMessage({
+  const msg = {
     type: 'frame',
-    fish: fishState.map((fish) => ({
+    fish: fishState.filter((fish) => !fish.eaten).map((fish) => ({
       id: fish.id,
       x: fish.x,
       y: fish.y,
       vx: fish.vx,
       vy: fish.vy,
+      size: fish.size,
       yUnit: fish.yUnit,
       isShark: fish.isShark,
       isSchoolFish: fish.isSchoolFish
     }))
-  });
+  };
+  if (eatenFishIds.length > 0) {
+    msg.eatenFishIds = eatenFishIds;
+    eatenFishIds = [];
+  }
+  self.postMessage(msg);
 };
 
 const tick = (dt) => {
@@ -320,8 +461,24 @@ const tick = (dt) => {
   stats.lastDtMs = dt * 1000;
 
   const activeSharks = sharksVisible ? sharks : [];
+  const allPredators = [...anglers, ...activeSharks];
+
+  // Predator dash & eating
+  let anyEaten = false;
+  allPredators.forEach((predator) => {
+    applyPredatorDash(predator, schoolFishCache, dt);
+    const eaten = checkPredatorEating(predator, schoolFishCache);
+    if (eaten.length > 0) {
+      eatenFishIds.push(...eaten);
+      anyEaten = true;
+      // End dash on successful catch
+      predator.dashTimer = 0;
+    }
+  });
+  if (anyEaten) rebuildSchoolFishCache();
 
   fishState.forEach((fish) => {
+    if (fish.eaten) return;
     if (fish.isShark && !sharksVisible) return;
 
     const squad = groups.get(fish.group) || [fish];
@@ -333,14 +490,19 @@ const tick = (dt) => {
 
     let minSpeed = fish.speedMin;
     let maxSpeed = fish.speedMax;
+    if (fish.dashTimer > 0) {
+      maxSpeed *= fish.isAngler ? DASH_SPEED_MULTIPLIER_ANGLER : DASH_SPEED_MULTIPLIER_SHARK;
+    }
     if (panicLevel > 0) {
       minSpeed += panicLevel * 28;
       maxSpeed += panicLevel * 22;
     }
 
-    applyRandomTurn(fish, dt, minSpeed, maxSpeed);
+    if (fish.dashTimer <= 0) {
+      applyRandomTurn(fish, dt, minSpeed, maxSpeed);
+      applyDrift(fish, dt);
+    }
     applyDepthSteering(fish, viewport.height, dt);
-    applyDrift(fish, dt);
     clampSpeed(fish, minSpeed, maxSpeed);
     advanceAndWrapPosition(fish, viewport, dt);
   });
@@ -356,6 +518,8 @@ self.onmessage = (event) => {
     groups = groupFishByGroup(fishState);
     anglers = fishState.filter((fish) => fish.isAngler);
     sharks = fishState.filter((fish) => fish.isShark);
+    eatenFishIds = [];
+    rebuildSchoolFishCache();
     sharksVisible = Boolean(payload?.sharksVisible);
     isActive = payload?.active !== false;
     lastTime = performance.now();
@@ -406,6 +570,8 @@ self.onmessage = (event) => {
     groups = new Map();
     anglers = [];
     sharks = [];
+    schoolFishCache = [];
+    eatenFishIds = [];
     lastTime = 0;
     resetStats();
   }

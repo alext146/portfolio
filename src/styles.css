@@ -67,13 +67,16 @@ textarea {
 .ocean-gradient,
 .ocean-light,
 .ocean-bubbles,
+.ocean-marine-snow,
 .ocean-depth-haze,
 .ocean-depth-dim,
-.ocean-foreground-haze {
+.ocean-foreground-haze,
+.ocean-caustics {
 	position: absolute;
 	inset: 0;
-	top: -34px;
-	bottom: -34px;
+	top: -200px;
+	bottom: -200px;
+	will-change: transform;
 	transform: translate3d(
 		0,
 		calc(
@@ -85,70 +88,102 @@ textarea {
 }
 
 .ocean-gradient {
-	--ocean-parallax-shift: -28px;
-	--ocean-scroll-speed: -0.072;
+	--ocean-parallax-shift: -40px;
+	--ocean-scroll-speed: -0.05;
 	background: linear-gradient(
 		180deg,
-		hsl(190 85% calc(45% - (var(--ocean-darkness, var(--ocean-depth)) * 38%))) 0%,
-		hsl(202 90% calc(30% - (var(--ocean-darkness, var(--ocean-depth)) * 30%))) 35%,
-		hsl(214 80% calc(16% - (var(--ocean-darkness, var(--ocean-depth)) * 22%))) 65%,
-		hsl(228 75% calc(4% - (var(--ocean-darkness, var(--ocean-depth)) * 12%))) 100%
+		hsl(190, 95%, calc(55% - (var(--ocean-darkness) * 45%))) 0%,
+		hsl(200, 90%, calc(40% - (var(--ocean-darkness) * 35%))) 20%,
+		hsl(215, 85%, calc(25% - (var(--ocean-darkness) * 20%))) 45%,
+		hsl(225, 80%, calc(12% - (var(--ocean-darkness) * 10%))) 70%,
+		hsl(235, 75%, calc(4% - (var(--ocean-darkness) * 4%))) 100%
 	);
-	transition: background 0.2s ease;
+	transition: background 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .ocean-light {
-	--ocean-parallax-shift: -40px;
-	--ocean-scroll-speed: -0.12;
+	--ocean-parallax-shift: -60px;
+	--ocean-scroll-speed: -0.15;
 	background:
-		radial-gradient(circle at 50% 0%, rgba(255, 255, 255, calc(0.18 - var(--ocean-darkness, var(--ocean-depth)) * 0.16)), transparent 55%),
-		radial-gradient(circle at 20% 20%, rgba(0, 200, 255, calc(0.2 - var(--ocean-darkness, var(--ocean-depth)) * 0.14)), transparent 50%);
+		radial-gradient(circle at 50% 0%, rgba(255, 255, 255, calc(0.22 - var(--ocean-darkness) * 0.2)), transparent 65%),
+		radial-gradient(circle at 20% 20%, rgba(0, 220, 255, calc(0.25 - var(--ocean-darkness) * 0.2)), transparent 55%),
+		radial-gradient(circle at 80% 10%, rgba(100, 255, 255, calc(0.15 - var(--ocean-darkness) * 0.15)), transparent 45%);
+	animation: sunlight-pulse 8s ease-in-out infinite alternate;
+	mix-blend-mode: overlay;
+}
+
+@keyframes sunlight-pulse {
+	0% { opacity: 0.75; filter: brightness(1); }
+	100% { opacity: 1; filter: brightness(1.2); }
 }
 
 .ocean-bubbles {
-	--ocean-parallax-shift: -56px;
-	--ocean-scroll-speed: -0.18;
+	--ocean-parallax-shift: -90px;
+	--ocean-scroll-speed: -0.25;
 	background-image:
-		radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1px), radial-gradient(circle, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-		radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+		radial-gradient(circle at 12% 24%, rgba(255, 255, 255, 0.45) 1.2px, transparent 1.2px),
+		radial-gradient(circle at 86% 72%, rgba(255, 255, 255, 0.45) 1.2px, transparent 1.2px),
+		radial-gradient(circle at 45% 15%, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px),
+		radial-gradient(circle at 25% 65%, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px),
+		radial-gradient(circle at 75% 85%, rgba(255, 255, 255, 0.3) 0.8px, transparent 0.8px),
+		radial-gradient(circle at 55% 45%, rgba(255, 255, 255, 0.2) 0.8px, transparent 0.8px),
+		radial-gradient(circle at 92% 35%, rgba(255, 255, 255, 0.2) 0.8px, transparent 0.8px);
 	background-size:
-		120px 120px,
-		180px 180px,
-		220px 220px;
+		300px 300px, 300px 300px,
+		450px 450px, 450px 450px, 450px 450px,
+		600px 600px, 600px 600px;
 	background-position:
-		20px 10px,
-		80px 40px,
-		140px 90px;
-	opacity: calc(0.32 - var(--ocean-darkness, var(--ocean-depth)) * 0.27);
+		0px 0px, 0px 0px,
+		0px 0px, 0px 0px, 0px 0px,
+		0px 0px, 0px 0px;
+	opacity: calc(0.7 - var(--ocean-darkness) * 0.2);
+	animation: bubbles-drift 20s linear infinite;
+	pointer-events: none;
+	z-index: 6;
+}
+
+@keyframes bubbles-drift {
+	from {
+		background-position:
+			0px 0px, 0px 0px,
+			0px 0px, 0px 0px, 0px 0px,
+			0px 0px, 0px 0px;
+	}
+	to {
+		background-position:
+			0px -300px, 0px -300px,
+			0px -450px, 0px -450px, 0px -450px,
+			0px -600px, 0px -600px;
+	}
 }
 
 .ocean-depth-haze {
-	--ocean-parallax-shift: -18px;
-	--ocean-scroll-speed: -0.03;
-	background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 8, 18, 0.45) 55%, rgba(0, 2, 6, 0.85) 100%);
-	opacity: calc(0.24 + var(--ocean-darkness, var(--ocean-depth)) * 0.88);
-	transition: opacity 0.2s ease;
+	--ocean-parallax-shift: -25px;
+	--ocean-scroll-speed: -0.04;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 12, 24, 0.5) 50%, rgba(0, 4, 12, 0.95) 100%);
+	opacity: calc(0.2 + var(--ocean-darkness) * 0.8);
+	transition: opacity 0.5s ease;
 }
 
 .ocean-depth-dim {
-	--ocean-parallax-shift: 16px;
+	--ocean-parallax-shift: 20px;
 	--ocean-scroll-speed: 0;
-	background: linear-gradient(180deg, rgba(3, 10, 18, 0.08) 0%, rgba(2, 7, 15, 0.22) 42%, rgba(0, 2, 8, 0.5) 72%, rgba(0, 0, 0, 0.72) 100%);
+	background: linear-gradient(180deg, rgba(3, 10, 18, 0.1) 0%, rgba(2, 7, 15, 0.3) 40%, rgba(0, 2, 8, 0.5) 70%, rgba(0, 0, 0, 0.75) 100%);
 	mix-blend-mode: multiply;
-	opacity: calc(0.08 + var(--ocean-darkness, var(--ocean-depth)) * 0.84);
-	transition: opacity 0.2s ease;
+	opacity: calc(0.1 + var(--ocean-darkness) * 0.75);
+	transition: opacity 0.5s ease;
 	pointer-events: none;
 	z-index: 4;
 }
 
 .ocean-foreground-haze {
-	--ocean-parallax-shift: 30px;
-	--ocean-scroll-speed: 0.008;
+	--ocean-parallax-shift: 45px;
+	--ocean-scroll-speed: 0.015;
 	background:
-		radial-gradient(circle at 50% 8%, rgba(188, 244, 255, calc(0.07 - var(--ocean-darkness, var(--ocean-depth)) * 0.05)), transparent 56%),
-		linear-gradient(180deg, rgba(8, 24, 42, 0.06) 0%, rgba(7, 20, 36, 0.12) 38%, rgba(3, 11, 22, 0.2) 72%, rgba(2, 8, 17, 0.28) 100%);
+		radial-gradient(circle at 50% 5%, rgba(180, 245, 255, calc(0.1 - var(--ocean-darkness) * 0.08)), transparent 60%),
+		linear-gradient(180deg, rgba(8, 24, 42, 0.08) 0%, rgba(7, 20, 36, 0.15) 40%, rgba(3, 11, 22, 0.2) 75%, rgba(2, 8, 17, 0.25) 100%);
 	mix-blend-mode: multiply;
-	opacity: calc(0.34 + var(--ocean-darkness, var(--ocean-depth)) * 0.56);
+	opacity: calc(0.2 + var(--ocean-darkness) * 0.5);
 	pointer-events: none;
 	z-index: 5;
 }
@@ -161,14 +196,14 @@ textarea {
 	height: 46vh;
 	border-radius: 30% 30% 0 0 / 10% 10% 0 0;
 	background:
-		radial-gradient(ellipse at 20% 36%, rgba(20, 14, 10, 0.5) 0%, transparent 48%),
-		radial-gradient(ellipse at 74% 42%, rgba(16, 11, 8, 0.44) 0%, transparent 44%),
-		repeating-linear-gradient(-8deg, rgba(116, 89, 54, 0.24) 0 16px, rgba(60, 44, 28, 0.22) 16px 30px),
-		linear-gradient(180deg, hsl(34 32% 24%) 0%, hsl(26 27% 17%) 58%, hsl(20 24% 12%) 100%);
+		radial-gradient(ellipse at 30% 20%, rgba(10, 25, 45, 0.6) 0%, transparent 50%),
+		radial-gradient(ellipse at 74% 42%, rgba(4, 12, 22, 0.5) 0%, transparent 44%),
+		repeating-linear-gradient(-8deg, rgba(8, 16, 28, 0.4) 0 16px, rgba(4, 10, 18, 0.4) 16px 30px),
+		linear-gradient(180deg, hsl(215, 45%, 12%) 0%, hsl(220, 50%, 8%) 40%, hsl(230, 60%, 4%) 100%);
 	box-shadow: 0 -22px 62px rgba(0, 0, 0, 0.42);
 	opacity: calc(var(--ocean-bottom) * 0.96);
 	transform: translateY(calc(20vh - var(--ocean-bottom) * 20vh + (var(--ocean-parallax) * 48px) - (var(--ocean-scroll-y, 0px) * 0.032)));
-	filter: brightness(calc(1.1 - var(--ocean-darkness, var(--ocean-depth)) * 0.2)) saturate(calc(1.06 - var(--ocean-darkness, var(--ocean-depth)) * 0.08));
+	filter: brightness(calc(1.2 - var(--ocean-darkness, var(--ocean-depth)) * 0.15)) saturate(calc(1.06 - var(--ocean-darkness, var(--ocean-depth)) * 0.08));
 	z-index: 1;
 	isolation: isolate;
 	transition:
@@ -182,8 +217,9 @@ textarea {
 	position: absolute;
 	inset: -22% 4% 56%;
 	background:
-		radial-gradient(ellipse at 14% 100%, rgba(0, 0, 0, 0.52), transparent 62%), radial-gradient(ellipse at 44% 100%, rgba(0, 0, 0, 0.4), transparent 58%),
-		radial-gradient(ellipse at 78% 100%, rgba(0, 0, 0, 0.5), transparent 64%);
+		radial-gradient(ellipse at 14% 100%, rgba(0, 5, 15, 0.6), transparent 62%),
+		radial-gradient(ellipse at 44% 100%, rgba(0, 0, 0, 0.4), transparent 58%),
+		radial-gradient(ellipse at 78% 100%, rgba(2, 8, 20, 0.5), transparent 64%);
 	opacity: calc(var(--ocean-bottom) * 0.62);
 	z-index: 1;
 }
@@ -192,7 +228,7 @@ textarea {
 	content: "";
 	position: absolute;
 	inset: 28% 0 0;
-	background-image: radial-gradient(circle, rgba(226, 194, 141, 0.14) 1px, transparent 1px);
+	background-image: radial-gradient(circle, rgba(140, 180, 220, 0.15) 1px, transparent 1px);
 	background-size: 14px 14px;
 	opacity: calc(var(--ocean-bottom) * 0.18);
 	z-index: 1;
@@ -211,8 +247,8 @@ textarea {
 	max-width: none;
 	transform-origin: bottom center;
 	transform: rotate(var(--seaweed-tilt, 0deg));
-	opacity: calc(0.68 + (var(--ocean-bottom) * 0.28));
-	filter: saturate(0.7) brightness(calc(0.64 - (var(--ocean-darkness, var(--ocean-depth)) * 0.08))) contrast(1.04);
+	opacity: calc((0.68 + (var(--ocean-bottom) * 0.28)) * var(--seaweed-brightness, 1));
+	filter: url(#water-distort) saturate(0.7) brightness(calc((0.64 - (var(--ocean-darkness, var(--ocean-depth)) * 0.08)) * var(--seaweed-brightness, 1))) contrast(1.04);
 	animation: seaweed-sway 8.4s ease-in-out infinite;
 }
 
@@ -223,6 +259,7 @@ textarea {
 	height: 100%;
 	pointer-events: none;
 	z-index: 1;
+	filter: url(#water-distort) brightness(1.05);
 }
 
 .ocean-creature-lane {
@@ -230,7 +267,8 @@ textarea {
 	left: 0;
 	top: 0;
 	width: 1px;
-	transition: opacity 0.25s linear;
+	transition: opacity 0.3s linear;
+	will-change: transform, opacity;
 }
 
 .ocean-creature-wrapper {
@@ -326,14 +364,22 @@ textarea {
 .ocean-creature-wrapper--angler.ocean-creature-wrapper--lure::before {
 	left: 79%;
 	top: 7%;
-	width: clamp(5px, calc(var(--creature-size) * 0.2), 7px);
-	height: clamp(5px, calc(var(--creature-size) * 0.2), 7px);
+	width: clamp(6px, calc(var(--creature-size) * 0.22), 9px);
+	height: clamp(6px, calc(var(--creature-size) * 0.22), 9px);
 	transform: translate(-50%, -50%);
-	background: rgba(255, 244, 188, 0.98);
+	background: #fff9db;
+	border-radius: 999px;
+	filter: url(#ocean-glow-lure);
 	box-shadow:
-		0 0 clamp(9px, calc(var(--creature-size) * 0.38), 13px) rgba(255, 244, 190, 0.9),
-		0 0 clamp(16px, calc(var(--creature-size) * 0.62), 22px) rgba(255, 225, 134, 0.68),
-		0 0 clamp(24px, calc(var(--creature-size) * 0.9), 32px) rgba(248, 214, 111, 0.4);
+		0 0 10px rgba(255, 244, 190, 1),
+		0 0 25px rgba(255, 225, 134, 0.8),
+		0 0 45px rgba(248, 214, 111, 0.5);
+	animation: lure-pulse 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes lure-pulse {
+	0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.9); }
+	100% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
 }
 
 @keyframes seaweed-sway {
@@ -351,16 +397,17 @@ textarea {
 .ocean-caustics {
 	position: absolute;
 	inset: 0;
-	top: -34px;
-	bottom: -34px;
-	opacity: calc(max(0, 1 - var(--ocean-depth, 0) * 3.2) * 0.82);
+	top: -50px;
+	opacity: calc(max(0, 1 - var(--ocean-depth, 0) * 2.8) * 0.9);
 	pointer-events: none;
 	z-index: 1;
+	mix-blend-mode: overlay;
+	transform-origin: top center;
 	transform: translate3d(
 		0,
 		calc(
-			(var(--ocean-parallax) * -48px) +
-				(var(--ocean-scroll-y, 0px) * -0.14)
+			(var(--ocean-parallax) * -60px) +
+				(var(--ocean-scroll-y, 0px) * -0.1)
 		),
 		0
 	);
@@ -370,54 +417,51 @@ textarea {
 .ocean-caustics::after {
 	content: "";
 	position: absolute;
-	inset: 0;
+	inset: -20% -50% 0 -50%;
+	transform-origin: top center;
+	-webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 65%);
+	mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 65%);
 }
 
 .ocean-caustics::before {
-	background:
-		radial-gradient(
-			ellipse 160% 48% at 36% -4%,
-			rgba(180, 240, 255, 0.38) 0%,
-			transparent 62%
-		),
-		radial-gradient(
-			ellipse 80% 32% at 72% -2%,
-			rgba(200, 250, 255, 0.3) 0%,
-			transparent 52%
-		);
-	animation: caustic-drift-a 10s ease-in-out infinite alternate;
+	background: repeating-linear-gradient(
+		110deg,
+		rgba(180, 240, 255, 0) 0%,
+		rgba(180, 240, 255, 0) 5%,
+		rgba(180, 240, 255, 0.14) 9%,
+		rgba(180, 240, 255, 0) 14%,
+		rgba(180, 240, 255, 0) 25%
+	);
+	animation: god-rays-sway 18s ease-in-out infinite alternate;
 }
 
 .ocean-caustics::after {
-	background:
-		radial-gradient(
-			ellipse 100% 36% at 18% 4%,
-			rgba(160, 230, 255, 0.24) 0%,
-			transparent 48%
-		),
-		radial-gradient(
-			ellipse 130% 42% at 55% -8%,
-			rgba(220, 248, 255, 0.2) 0%,
-			transparent 56%
-		);
-	animation: caustic-drift-b 14s ease-in-out infinite alternate;
+	background: repeating-linear-gradient(
+		75deg,
+		rgba(200, 250, 255, 0) 0%,
+		rgba(200, 250, 255, 0) 8%,
+		rgba(200, 250, 255, 0.08) 12%,
+		rgba(200, 250, 255, 0) 18%,
+		rgba(200, 250, 255, 0) 36%
+	);
+	animation: god-rays-sway-alt 24s ease-in-out infinite alternate;
 }
 
-@keyframes caustic-drift-a {
+@keyframes god-rays-sway {
 	0% {
-		transform: translate3d(-10px, -8px, 0) scaleX(1.03);
+		transform: perspective(600px) rotateX(15deg) rotate(2deg) scale(1.1) translateX(-2%);
 	}
 	100% {
-		transform: translate3d(10px, 6px, 0) scaleX(0.97);
+		transform: perspective(600px) rotateX(15deg) rotate(-2deg) scale(1.1) translateX(2%);
 	}
 }
 
-@keyframes caustic-drift-b {
+@keyframes god-rays-sway-alt {
 	0% {
-		transform: translate3d(8px, -6px, 0) scaleX(0.96);
+		transform: perspective(600px) rotateX(15deg) rotate(-3deg) scale(1.15) translateX(3%);
 	}
 	100% {
-		transform: translate3d(-8px, 10px, 0) scaleX(1.04);
+		transform: perspective(600px) rotateX(15deg) rotate(3deg) scale(1.15) translateX(-3%);
 	}
 }
 
@@ -438,26 +482,42 @@ textarea {
 /* ── marine snow (particles visible at depth) ── */
 
 .ocean-marine-snow {
-	position: absolute;
-	inset: 0;
+	--ocean-parallax-shift: -45px;
+	--ocean-scroll-speed: -0.15;
 	background-image:
-		radial-gradient(circle, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
-		radial-gradient(circle, rgba(200, 240, 255, 0.55) 1px, transparent 1px),
-		radial-gradient(circle, rgba(255, 255, 255, 0.45) 1px, transparent 1px);
-	background-size: 160px 160px, 280px 280px, 220px 220px;
-	background-position: 30px 20px, 125px 85px, 210px 155px;
-	opacity: calc(max(0, var(--ocean-depth, 0) - 0.18) * 0.7);
-	animation: marine-snow-fall 24s linear infinite;
+		radial-gradient(circle at 18% 33%, rgba(255, 255, 255, 0.25) 1.2px, transparent 1.2px),
+		radial-gradient(circle at 74% 82%, rgba(255, 255, 255, 0.25) 1.2px, transparent 1.2px),
+		radial-gradient(circle at 38% 12%, rgba(200, 240, 255, 0.15) 0.8px, transparent 0.8px),
+		radial-gradient(circle at 89% 56%, rgba(200, 240, 255, 0.15) 0.8px, transparent 0.8px),
+		radial-gradient(circle at 12% 78%, rgba(200, 240, 255, 0.15) 0.8px, transparent 0.8px),
+		radial-gradient(circle at 62% 23%, rgba(255, 255, 255, 0.1) 0.8px, transparent 0.8px),
+		radial-gradient(circle at 45% 91%, rgba(255, 255, 255, 0.1) 0.8px, transparent 0.8px);
+	background-size:
+		350px 350px, 350px 350px,
+		500px 500px, 500px 500px, 500px 500px,
+		650px 650px, 650px 650px;
+	background-position:
+		0px 0px, 0px 0px,
+		0px 0px, 0px 0px, 0px 0px,
+		0px 0px, 0px 0px;
+	opacity: calc(max(0, var(--ocean-depth, 0) - 0.1) * 0.7);
+	animation: marine-snow-fall 12s linear infinite;
 	pointer-events: none;
-	z-index: 2;
+	z-index: 6;
 }
 
 @keyframes marine-snow-fall {
-	0% {
-		background-position: 30px 20px, 125px 85px, 210px 155px;
+	from {
+		background-position:
+			0px 0px, 0px 0px,
+			0px 0px, 0px 0px, 0px 0px,
+			0px 0px, 0px 0px;
 	}
-	100% {
-		background-position: 30px 180px, 125px 365px, 210px 375px;
+	to {
+		background-position:
+			0px 350px, 0px 350px,
+			0px 500px, 0px 500px, 0px 500px,
+			0px 650px, 0px 650px;
 	}
 }
 
@@ -471,48 +531,47 @@ textarea {
 	.ocean-depth-dim,
 	.ocean-foreground-haze,
 	.ocean-caustics {
-		top: -16px;
-		bottom: -16px;
+		top: -80px;
+		bottom: -80px;
 	}
 
 	.ocean-gradient {
-		--ocean-parallax-shift: -10px;
-		--ocean-scroll-speed: -0.028;
+		--ocean-parallax-shift: -25px;
+		--ocean-scroll-speed: -0.04;
 	}
 
 	.ocean-light {
-		--ocean-parallax-shift: -14px;
-		--ocean-scroll-speed: -0.048;
+		--ocean-parallax-shift: -30px;
+		--ocean-scroll-speed: -0.08;
 		background:
 			radial-gradient(
 				circle at 50% 0%,
-				rgba(255, 255, 255, calc(0.18 - var(--ocean-darkness, var(--ocean-depth)) * 0.16)),
-				transparent 60%
+				rgba(255, 255, 255, calc(0.22 - var(--ocean-darkness) * 0.2)),
+				transparent 65%
 			),
 			radial-gradient(
 				circle at 40% 18%,
-				rgba(0, 200, 255, calc(0.2 - var(--ocean-darkness, var(--ocean-depth)) * 0.14)),
+				rgba(0, 220, 255, calc(0.25 - var(--ocean-darkness) * 0.2)),
 				transparent 55%
 			);
 	}
 
 	.ocean-bubbles {
-		--ocean-parallax-shift: -18px;
-		--ocean-scroll-speed: -0.065;
-		background-size: 90px 90px, 140px 140px, 170px 170px;
+		--ocean-parallax-shift: -45px;
+		--ocean-scroll-speed: -0.12;
 	}
 
 	.ocean-depth-haze {
-		--ocean-parallax-shift: -7px;
-		--ocean-scroll-speed: -0.012;
+		--ocean-parallax-shift: -15px;
+		--ocean-scroll-speed: -0.025;
 	}
 
 	.ocean-depth-dim {
-		--ocean-parallax-shift: 6px;
+		--ocean-parallax-shift: 10px;
 	}
 
 	.ocean-foreground-haze {
-		--ocean-parallax-shift: 10px;
+		--ocean-parallax-shift: 25px;
 	}
 
 	.ocean-caustics {
@@ -533,10 +592,6 @@ textarea {
 			rgba(0, 2, 10, calc(var(--ocean-depth, 0) * 0.96)) 100%
 		);
 	}
-
-	.ocean-marine-snow {
-		background-size: 130px 130px, 220px 220px, 180px 180px;
-	}
 }
 
 /* ── prefers-reduced-motion ── */
@@ -544,10 +599,6 @@ textarea {
 @media (prefers-reduced-motion: reduce) {
 	.ocean-caustics::before,
 	.ocean-caustics::after {
-		animation: none;
-	}
-
-	.ocean-marine-snow {
 		animation: none;
 	}
 
@@ -1318,16 +1369,30 @@ img {
 }
 
 .contact__form {
-	--glass-border-alpha: 0.1;
-	--glass-highlight-alpha: 0.05;
-	--glass-shadow-alpha: 0.14;
-	--glass-blur: 14px;
-	--glass-saturation: 150%;
+	position: relative;
 	display: grid;
 	gap: 1rem;
 	padding: 1.5rem;
 	border-radius: 18px;
+	border: 1px solid rgba(255, 255, 255, 0.14);
+	background: transparent;
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
 	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.contact__form::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border: 1px solid rgba(255, 255, 255, 0.14);
+	border-radius: inherit;
+	pointer-events: none;
+}
+
+.contact__form:hover,
+.contact__form:focus-within {
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(8, 10, 16, 0.35));
 }
 
 .field {

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 const FISH_ICON_PATH =
 	"M22,11.71C21.37,9.74,19,6,14.5,6A10.44,10.44,0,0,0,8.19,8.37a6.64,6.64,0,0,0-.9-.68,4.62,4.62,0,0,0-4.84,0A1,1,0,0,0,2,8.51,5.43,5.43,0,0,0,3.42,12,5.43,5.43,0,0,0,2,15.49a1,1,0,0,0,.45.83,4.6,4.6,0,0,0,4.84,0,5.4,5.4,0,0,0,.9-.67A10.44,10.44,0,0,0,14.5,18C19,18,21.37,14.26,22,12.29A1.14,1.14,0,0,0,22,11.71Z";
 
-const SEAWEED_PATCH_COUNT = 5;
+const SEAWEED_PATCH_COUNT = 15;
 const WRAP_MARGIN = 160;
 const MAX_TICK_DT = 0.05;
 const DEG_TO_RAD = Math.PI / 180;
@@ -232,18 +232,18 @@ const smoothstep = (start, end, value) => {
 };
 
 const getZoneOpacities = (depth) => {
-	const sunlight = 1 - smoothstep(0.22, 0.34, depth);
-	const twilight = smoothstep(0.2, 0.34, depth) * (1 - smoothstep(0.5, 0.64, depth));
-	const midnight = smoothstep(0.48, 0.62, depth) * (1 - smoothstep(0.76, 0.9, depth));
-	const abyss = smoothstep(0.74, 0.88, depth);
+	const sunlight = 1 - smoothstep(0.2, 0.38, depth);
+	const twilight = smoothstep(0.18, 0.38, depth) * (1 - smoothstep(0.48, 0.68, depth));
+	const midnight = smoothstep(0.45, 0.65, depth) * (1 - smoothstep(0.72, 0.94, depth));
+	const abyss = smoothstep(0.7, 0.92, depth);
 
 	return { sunlight, twilight, midnight, abyss };
 };
 
 const getThemeColor = (depth) => {
 	const clampedDepth = clamp(depth);
-	const lightness = 45 - clampedDepth * 30;
-	return `hsl(190 85% ${lightness.toFixed(1)}%)`;
+	const lightness = 48 - clampedDepth * 42;
+	return `hsl(195 85% ${lightness.toFixed(1)}%)`;
 };
 
 const createAssetResolver = (baseUrl) => (path) => `${baseUrl}${path.replace(/^\//, "")}`;
@@ -315,18 +315,22 @@ const getFishParallaxShift = (fish, depthValue, scrollValue, scrollProgress, vie
 	const progressTopScale = isMobile ? MOBILE_FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE : FISH_PARALLAX_SCROLL_PROGRESS_TOP_SCALE;
 
 	const topWeight = 1 - clamp(fish.yUnit, 0, 1);
-	const depthShift = -clamp(depthValue, 0, 1) * (depthBase + topWeight * depthTopScale);
+	// Increase parallax for larger (closer) fish
+	const sizeWeight = clamp((fish.size - 9) / 45, 0, 1) * 1.5;
+	const parallaxMultiplier = 1 + sizeWeight;
+
+	const depthShift = -clamp(depthValue, 0, 1) * (depthBase + topWeight * depthTopScale) * parallaxMultiplier;
 	const progressShift =
 		-clamp(scrollProgress, 0, 1) *
 		viewportHeight *
-		(progressBase + topWeight * progressTopScale);
+		(progressBase + topWeight * progressTopScale) * parallaxMultiplier;
 	const scrollScreens = scrollValue / Math.max(viewportHeight, 1);
-	const microScrollShift = -(scrollScreens * (microBase + topWeight * microTopScale));
+	const microScrollShift = -(scrollScreens * (microBase + topWeight * microTopScale)) * parallaxMultiplier;
 
 	return clamp(
 		depthShift + progressShift + microScrollShift,
-		-FISH_SCROLL_PARALLAX_MAX_SHIFT,
-		FISH_SCROLL_PARALLAX_MAX_SHIFT
+		-FISH_SCROLL_PARALLAX_MAX_SHIFT * 1.5,
+		FISH_SCROLL_PARALLAX_MAX_SHIFT * 1.5
 	);
 };
 
@@ -461,13 +465,17 @@ const createSeaweedPatches = (count = SEAWEED_PATCH_COUNT) => {
 		const randomHeightUnit = clamp(0.16 + rng() * 0.74, 0.16, 0.9);
 		const heightUnit = clamp(contourUnit * 0.3 + randomHeightUnit * 0.7, 0.14, 0.9);
 		const bottomValue = heightUnit * 100;
+		const depthFactor = clamp((heightUnit - 0.14) / 0.76, 0, 1);
+		const scale = 1 - depthFactor * 0.55;
+		const brightness = 1 - depthFactor * 0.7;
 
 		patches.push({
 			id: `seaweed-${index + 1}`,
 			leftValue,
 			left: `${leftValue.toFixed(2)}%`,
 			bottom: `${bottomValue.toFixed(2)}%`,
-			size: Math.round(68 + rng() * 36),
+			size: Math.round((68 + rng() * 36) * scale),
+			brightness: Number(brightness.toFixed(2)),
 			sway: Number((7 + rng() * 2.8).toFixed(2)),
 			delay: Number((rng() * -4.6).toFixed(2)),
 			tilt: Math.round((rng() - 0.5) * 14),
@@ -548,6 +556,7 @@ const createFishState = (creatures, viewport) => {
 			yUnit,
 			x,
 			y,
+			size: creature.size,
 			vx: Math.cos(heading) * speed * initialDirection,
 			vy: Math.sin(heading) * speed * (isSchoolFish ? 0.44 : 0.52),
 			speedMin: isSchoolFish ? 24 + rng() * 6 : 14 + rng() * 4,
@@ -1327,7 +1336,7 @@ export default function OceanBackground() {
 		};
 	}, [creatures, schoolCreatures.length, schoolFishRenderMap]);
 
-	const bottomReveal = clamp((depth - 0.82) / 0.16);
+	const bottomReveal = clamp((depth - 0.65) / 0.35);
 	const darkness = clamp(Math.pow(depth, 0.6) * 1.1);
 	const zoneOpacities = getZoneOpacities(depth);
 
@@ -1345,6 +1354,23 @@ export default function OceanBackground() {
 			}}
 			aria-hidden="true"
 		>
+			<svg style={{ position: "absolute", width: 0, height: 0, pointerEvents: "none" }} aria-hidden="true">
+				<defs>
+					<filter id="ocean-glow-lure">
+						<feGaussianBlur stdDeviation="3.5" result="blur" />
+						<feComposite in="SourceGraphic" in2="blur" operator="over" />
+					</filter>
+					<filter id="ocean-creature-volume">
+						<feDropShadow dx="-1.5" dy="1.5" stdDeviation="2" floodOpacity="0.45" />
+					</filter>
+					<filter id="water-distort">
+						<feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="1" result="noise">
+							<animate attributeName="baseFrequency" values="0.012;0.018;0.012" dur="15s" repeatCount="indefinite" />
+						</feTurbulence>
+						<feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" />
+					</filter>
+				</defs>
+			</svg>
 			<div className="ocean-gradient" />
 			<div className="ocean-light" />
 			<div className="ocean-caustics" />
@@ -1364,6 +1390,7 @@ export default function OceanBackground() {
 								bottom: patch.bottom,
 								"--seaweed-size": `${patch.size}px`,
 								"--seaweed-tilt": `${patch.tilt}deg`,
+								"--seaweed-brightness": patch.brightness,
 								animationDuration: `${patch.sway}s`,
 								animationDelay: `${patch.delay}s`,
 							}}
@@ -1406,6 +1433,7 @@ export default function OceanBackground() {
 											: TURN_ORIGIN_TIP_RIGHT,
 							zIndex: creature.layer,
 							transform: "translate3d(-220px, -220px, 0)",
+							filter: creature.species === "angler" ? "url(#water-distort)" : "url(#ocean-creature-volume) url(#water-distort)",
 						}}
 					>
 						<div className={getWrapperClassName(creature)}>
